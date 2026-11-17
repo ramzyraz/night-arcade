@@ -9,7 +9,7 @@ name: Nightly sky
 
 on:
   schedule:
-    - cron: "0 19 * * *" # 19:00 UTC = midnight in Pakistan
+    - cron: "17 19 * * *" # 19:17 UTC = 00:17 in Pakistan (off the top of the hour, when GitHub drops most scheduled runs)
   workflow_dispatch:
 
 concurrency:

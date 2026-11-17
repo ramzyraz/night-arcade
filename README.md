@@ -26,7 +26,7 @@ Deep Sky loads `skies.json` with `fetch`, so open it through a server, not as a 
 ## Daily skies
 
 The `Nightly sky` GitHub Action (`.github/workflows/nightly-sky.yml`) runs at
-midnight Pakistan time. It asks an OpenAI model to write one new category
+19:17 UTC (00:17 Pakistan time). It asks an OpenAI model to write one new category
 (instructions in [scripts/sky-prompt.md](scripts/sky-prompt.md)), validates it,
 schedules the next few nights, and commits `deep-sky/skies.json`. The hosting
 platform sees the commit and redeploys. If the model's category fails
