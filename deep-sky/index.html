@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Deep Sky · Night Arcade</title>
+<meta name="description" content="A new sky every night: five categories, thirty seconds each. The rarer your answer, the deeper the star.">
+<meta property="og:title" content="Deep Sky">
+<meta property="og:description" content="A new sky every night: five categories, thirty seconds each. The rarer your answer, the deeper the star.">
+<meta name="theme-color" content="#0a0f24">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%228%22%20fill%3D%22%230a0f24%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%225%22%20fill%3D%22%23ffcf6b%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2210%22%20fill%3D%22%23ffcf6b%22%20opacity%3D%22.25%22%2F%3E%3C%2Fsvg%3E">
+<style>
+  html { box-sizing: border-box; }
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Inter:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+  /* Layout: one centred column over a full-bleed star chart; deliberately single-theme (night sky). */
+  :root {
+    --sky: #0a0f24;
+    --sky-2: #141b3d;
+    --ink: #e8ecf8;
+    --ink-dim: #9aa3c4;
+    --line: rgba(232, 236, 248, 0.14);
+    --panel: rgba(14, 20, 48, 0.86);
+    --t1: #f4f1e6;  /* naked eye */
+    --t2: #8fc8ff;  /* binoculars */
+    --t3: #c49bff;  /* telescope */
+    --t4: #ffcf6b;  /* deep field */
+    --bad: #ff8a9a;
+    --font-display: "Unbounded", "Avenir Next", system-ui, sans-serif;
+    --font-body: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    color-scheme: dark;
+  }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: radial-gradient(120% 90% at 50% 0%, var(--sky-2), var(--sky) 70%);
+    background-color: var(--sky);
+    color: var(--ink);
+    font-family: var(--font-body);
+    overflow: hidden;
+  }
+  canvas#sky { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .wrap {
+    position: relative; z-index: 1;
+    height: 100%;
+    display: grid;
+    padding-block: 18px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    box-sizing: border-box;
+  }
+  .screen { width: min(560px, 100%); margin: 0 auto; min-width: 0; }
+  .screen[hidden] { display: none !important; }
+
+  /* ---------- start / results cards ---------- */
+  .center { align-self: center; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 26px 22px;
+    display: grid; gap: 18px;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    max-height: calc(100vh - 60px); overflow-y: auto;
+  }
+  .eyebrow { font: 500 12px var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
+  h1 { margin: 0; font: 800 clamp(38px, 10vw, 58px)/1 var(--font-display); letter-spacing: -0.02em; }
+  h1 span { color: var(--t4); }
+  h2 { margin: 0; font: 800 26px/1.15 var(--font-display); text-wrap: balance; }
+  p { margin: 0; line-height: 1.55; color: var(--ink-dim); }
+  .tiers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; }
+  .tier { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-dim); }
+  .tier b { color: var(--ink); font-weight: 600; }
+  .tier .pts { margin-left: auto; font: 500 12px var(--font-mono); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; box-shadow: 0 0 8px currentColor; }
+  .c1 { color: var(--t1); } .c2 { color: var(--t2); } .c3 { color: var(--t3); } .c4 { color: var(--t4); }
+  .dot.c1 { background: var(--t1); } .dot.c2 { background: var(--t2); } .dot.c3 { background: var(--t3); } .dot.c4 { background: var(--t4); }
+  .stats { display: flex; gap: 10px; }
+  .stat { flex: 1; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; }
+  .stat .v { font: 800 22px var(--font-display); font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-dim); }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  button {
+    font: 700 15px var(--font-body);
+    border-radius: 999px; padding: 12px 22px; cursor: pointer;
+    border: 1px solid var(--line); background: transparent; color: var(--ink);
+    transition: transform .12s, background .2s;
+  }
+  button.primary { background: var(--t4); color: #1a1530; border-color: transparent; box-shadow: 0 0 24px rgba(255, 207, 107, .35); }
+  button:hover:not(:disabled) { transform: translateY(-1px); }
+  button:disabled { opacity: .5; cursor: wait; }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--t2); outline-offset: 2px; }
+  .muted { font-size: 13px; }
+
+  /* ---------- play ---------- */
+  #play { display: grid; grid-template-rows: auto 1fr auto; gap: 12px; height: 100%; }
+  .top { display: grid; gap: 10px; }
+  .topline { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .round { font: 500 12px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); }
+  .score { font: 800 20px var(--font-display); font-variant-numeric: tabular-nums; }
+  .score small { font: 500 12px var(--font-mono); color: var(--ink-dim); margin-left: 4px; }
+  .prompt { font: 800 clamp(24px, 6.5vw, 34px)/1.1 var(--font-display); text-wrap: balance; }
+  .timer { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; }
+  .timer i { display: block; height: 100%; width: 100%; background: var(--t2); transform-origin: left; }
+  .timer.low i { background: var(--bad); }
+  .bottom { display: grid; gap: 8px; }
+  .feedback { min-height: 22px; font: 600 14px var(--font-body); text-align: center; }
+  .feedback .pts { font-family: var(--font-mono); }
+  input#guess {
+    width: 100%; box-sizing: border-box;
+    font: 600 18px var(--font-body); color: var(--ink);
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 16px;
+  }
+  input#guess::placeholder { color: var(--ink-dim); font-weight: 400; }
+  .shake { animation: shake .3s; }
+  @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+  /* ---------- round summary ---------- */
+  .found { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 13px; padding: 4px 10px; border-radius: 999px; border: 1px solid currentColor; }
+  .chip.missed { opacity: .7; border-style: dashed; }
+  .sum-list { display: grid; gap: 8px; }
+  .sum-row { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .sum-row span:last-child { font-family: var(--font-mono); white-space: nowrap; }
+  .copied { font-size: 13px; color: var(--t2); min-height: 18px; }
+  .sharebox { font: 500 13px/1.5 var(--font-mono); white-space: pre-wrap; background: rgba(0,0,0,.25); border-radius: 10px; padding: 10px 12px; user-select: all; }
+
+  @media (prefers-reduced-motion: reduce) {
+    button { transition: none; }
+    .shake { animation: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<div class="wrap">
+  <!-- START -->
+  <section class="screen center" id="start">
+    <div class="card">
+      <div class="eyebrow" id="nightLabel">Night 1</div>
+      <h1>Deep <span>Sky</span></h1>
+      <p>Five categories, 30 seconds each. Every answer becomes a star. The answers everyone thinks of stay close and dim; the obscure ones sit deep in the sky and are worth far more.</p>
+      <div class="tiers">
+        <div class="tier"><span class="dot c1"></span><b>Naked eye</b><span class="pts">10 ly</span></div>
+        <div class="tier"><span class="dot c2"></span><b>Binoculars</b><span class="pts">30 ly</span></div>
+        <div class="tier"><span class="dot c3"></span><b>Telescope</b><span class="pts">70 ly</span></div>
+        <div class="tier"><span class="dot c4"></span><b>Deep field</b><span class="pts">150 ly</span></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="v" id="stStreak">0</span><span class="l">Streak</span></div>
+        <div class="stat"><span class="v" id="stBest">0</span><span class="l">Best night</span></div>
+        <div class="stat"><span class="v" id="stPlayed">0</span><span class="l">Nights</span></div>
+      </div>
+      <div class="row">
+        <button class="primary" id="btnDaily" type="button">Start tonight's sky</button>
+        <button id="btnPractice" type="button">Practice sky</button>
+      </div>
+      <p class="muted" id="startNote">Tonight's sky is the same for everyone, and it changes at midnight. Practice skies are random and don't count.</p>
+    </div>
+  </section>
+
+  <!-- PLAY -->
+  <section class="screen" id="play" hidden>
+    <div class="top">
+      <div class="topline">
+        <span class="round" id="roundLabel">Sky 1 of 5</span>
+        <span class="score"><span id="scoreNow">0</span><small>ly</small></span>
+      </div>
+      <div class="prompt" id="promptText">Name countries</div>
+      <div class="timer" id="timer"><i id="timerBar"></i></div>
+    </div>
+    <div></div>
+    <div class="bottom">
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <form id="guessForm" autocomplete="off">
+        <input id="guess" type="text" placeholder="Type an answer and press Enter" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" aria-label="Your answer">
+      </form>
+    </div>
+  </section>
+
+  <!-- ROUND SUMMARY -->
+  <section class="screen center" id="between" hidden>
+    <div class="card">
+      <div class="eyebrow" id="betweenLabel">Sky 1 of 5 charted</div>
+      <h2 id="betweenTitle">Countries</h2>
+      <div class="stats">
+        <div class="stat"><span class="v" id="bScore">0</span><span class="l">Light-years</span></div>
+        <div class="stat"><span class="v" id="bCount">0</span><span class="l">Stars</span></div>
+        <div class="stat"><span class="v" id="bDeep">0</span><span class="l">Deep field</span></div>
+      </div>
+      <div class="found" id="bFound"></div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:8px">Faint ones you missed</div>
+        <div class="found" id="bMissed"></div>
+      </div>
+      <button class="primary" id="btnNext" type="button">Next sky</button>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="screen center" id="final" hidden>
+    <div class="card">
+      <div class="eyebrow" id="finalLabel">Night 1 complete</div>
+      <h2><span id="fTotal">0</span> light-years</h2>
+      <p id="fLine"></p>
+      <div class="sum-list" id="fRows"></div>
+      <div class="sharebox" id="shareText"></div>
+      <div class="row">
+        <button class="primary" id="btnShare" type="button">Copy result</button>
+        <button id="btnHome" type="button">Done</button>
+      </div>
+      <div class="copied" id="copied" aria-live="polite"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+// Categories and the nightly schedule live in skies.json, which a nightly job
+// extends. Format per category: four tier strings, "|" between answers and
+// "=" between aliases (display name first).
+let CATEGORIES = [], NIGHTS = {};
+
+const TIER = [
+  { name: "Naked eye", pts: 10, color: "#f4f1e6", cls: "c1" },
+  { name: "Binoculars", pts: 30, color: "#8fc8ff", cls: "c2" },
+  { name: "Telescope", pts: 70, color: "#c49bff", cls: "c3" },
+  { name: "Deep field", pts: 150, color: "#ffcf6b", cls: "c4" },
+];
+const SHARE_GLYPH = ["⚪", "🔵", "🟣", "🟡"];
+const ROUNDS = 5, ROUND_SECONDS = 30;
+const EPOCH = "2026-11-17"; // Night 1
+
+// ---------------------------------------------------------------------------
+// Matching
+// ---------------------------------------------------------------------------
+const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+  .replace(/&/g, "and").replace(/['’]/g, "").replace(/[^a-z0-9+#]/g, "");
+
+function buildIndex(cat) {
+  const byKey = new Map(), answers = [];
+  cat.tiers.forEach((line, tier) => {
+    for (const entry of line.split("|")) {
+      const names = entry.split("=");
+      const ans = { display: names[0], tier, keys: [] };
+      for (const n of names) {
+        const k = norm(n);
+        if (k && !byKey.has(k)) { byKey.set(k, ans); ans.keys.push(k); }
+      }
+      if (ans.keys.length) answers.push(ans);
+    }
+  });
+  return { byKey, answers };
+}
+
+function lev(a, b, max) {
+  if (Math.abs(a.length - b.length) > max) return max + 1;
+  let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i]; let rowMin = i;
+    for (let j = 1; j <= b.length; j++) {
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      rowMin = Math.min(rowMin, cur[j]);
+    }
+    if (rowMin > max) return max + 1;
+    prev = cur;
+  }
+  return prev[b.length];
+}
+
+function match(index, raw) {
+  const k = norm(raw);
+  if (!k) return null;
+  if (index.byKey.has(k)) return index.byKey.get(k);
+  // simple plurals / singulars
+  for (const v of [k.replace(/es$/, ""), k.replace(/s$/, ""), k + "s"]) {
+    if (v !== k && v.length > 2 && index.byKey.has(v)) return index.byKey.get(v);
+  }
+  // forgiving spelling for longer words
+  if (k.length < 5) return null;
+  const max = k.length >= 9 ? 2 : 1;
+  let best = null, bestD = max + 1, tie = false;
+  for (const [key, ans] of index.byKey) {
+    if (key.length < 4) continue;
+    const d = lev(k, key, max);
+    if (d < bestD) { best = ans; bestD = d; tie = false; }
+    else if (d === bestD && ans !== best) tie = true;
+  }
+  return bestD <= max && !tie ? best : null;
+}
+
+// ---------------------------------------------------------------------------
+// Dates, seeding, storage
+// ---------------------------------------------------------------------------
+const pad = (n) => String(n).padStart(2, "0");
+const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const today = () => ymd(new Date());
+const yesterday = () => { const d = new Date(); d.setDate(d.getDate() - 1); return ymd(d); };
+function nightNumber(dateStr) {
+  const [y, m, d] = dateStr.split("-").map(Number), [ey, em, ed] = EPOCH.split("-").map(Number);
+  return Math.round((Date.UTC(y, m - 1, d) - Date.UTC(ey, em - 1, ed)) / 86400000) + 1;
+}
+function hashStr(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { let a = seed; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function pickCategories(seed, date) {
+  // A scheduled night wins; otherwise fall back to a seeded pick from the bank.
+  const planned = date && NIGHTS[date];
+  if (planned) {
+    const byId = new Map(CATEGORIES.map((c) => [c.id, c]));
+    const cats = planned.map((id) => byId.get(id)).filter(Boolean);
+    if (cats.length === ROUNDS) return cats;
+  }
+  const r = rng(seed), list = CATEGORIES.slice();
+  for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+  return list.slice(0, ROUNDS);
+}
+
+const STORE_KEY = "deep-sky-v1";
+function load() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { return {}; }
+}
+function save(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }
+let store = Object.assign({ nights: {}, streak: 0, lastDate: null, best: 0 }, load());
+
+// ---------------------------------------------------------------------------
+// Sky canvas
+// ---------------------------------------------------------------------------
+const canvas = document.getElementById("sky"), ctx = canvas.getContext("2d");
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let W = 0, H = 0, DPR = 1, bgStars = [], skyStars = [], cx = 0, cy = 0, R = 0;
+function resize() {
+  DPR = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  cx = W / 2; cy = H * 0.52; R = Math.min(W, H * 0.9) * 0.46;
+  const r = rng(42);
+  bgStars = Array.from({ length: Math.round(W * H / 2600) }, () => ({ x: r() * W, y: r() * H, s: r() * 1.1 + 0.2, p: r() * 6.28 }));
+}
+addEventListener("resize", resize);
+
+function addSkyStar(ans) {
+  const bands = [[0.08, 0.3], [0.3, 0.55], [0.55, 0.78], [0.78, 0.97]][ans.tier];
+  let best = null;
+  // try a few spots and keep the one farthest from existing stars, so labels overlap less
+  for (let i = 0; i < 14; i++) {
+    const a = Math.random() * Math.PI * 2, d = R * (bands[0] + Math.random() * (bands[1] - bands[0]));
+    const x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d * 0.78;
+    const near = skyStars.reduce((m, s) => Math.min(m, Math.hypot(s.x - x, s.y - y)), 1e9);
+    if (!best || near > best.near) best = { x, y, near };
+  }
+  skyStars.push({ x: best.x, y: best.y, tier: ans.tier, label: ans.display, born: performance.now(), p: Math.random() * 6.28 });
+}
+
+function drawStar(x, y, size, color, spikes, glow) {
+  const g = ctx.createRadialGradient(x, y, 0, x, y, size * 5 * glow);
+  g.addColorStop(0, color); g.addColorStop(0.2, color + "88"); g.addColorStop(1, color + "00");
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, size * 5 * glow, 0, 6.283); ctx.fill();
+  if (spikes) {
+    ctx.strokeStyle = color + "cc"; ctx.lineWidth = 1;
+    const L = size * 6 * glow;
+    ctx.beginPath(); ctx.moveTo(x - L, y); ctx.lineTo(x + L, y); ctx.moveTo(x, y - L); ctx.lineTo(x, y + L); ctx.stroke();
+  }
+  ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(x, y, size * 0.8, 0, 6.283); ctx.fill();
+}
+
+function frame(now) {
+  ctx.clearRect(0, 0, W, H);
+  for (const s of bgStars) {
+    const tw = reduceMotion ? 0.6 : 0.45 + 0.35 * Math.sin(now / 900 + s.p);
+    ctx.fillStyle = `rgba(232,236,248,${tw * 0.6})`;
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, 6.283); ctx.fill();
+  }
+  if (skyStars.length) {
+    // faint depth rings, like a planisphere
+    ctx.strokeStyle = "rgba(232,236,248,0.06)"; ctx.lineWidth = 1;
+    for (const f of [0.3, 0.55, 0.78, 0.97]) { ctx.beginPath(); ctx.ellipse(cx, cy, R * f, R * f * 0.78, 0, 0, 6.283); ctx.stroke(); }
+  }
+  ctx.font = "500 12px 'IBM Plex Mono', ui-monospace, monospace";
+  ctx.textBaseline = "middle";
+  for (const s of skyStars) {
+    const age = (now - s.born) / 1000;
+    const pop = reduceMotion ? 1 : Math.min(1, age * 3);
+    const burst = reduceMotion ? 1 : 1 + Math.max(0, 1 - age * 1.5) * 1.6;
+    const tw = reduceMotion ? 1 : 0.85 + 0.15 * Math.sin(now / 400 + s.p);
+    const t = TIER[s.tier];
+    drawStar(s.x, s.y, (1.6 + s.tier * 0.55) * pop, t.color, s.tier >= 2, burst * tw);
+    ctx.globalAlpha = Math.min(1, age * 2) * 0.9;
+    ctx.fillStyle = t.color;
+    const left = s.x > W - 140;
+    ctx.textAlign = left ? "right" : "left";
+    ctx.fillText(s.label, s.x + (left ? -10 : 10), s.y);
+    ctx.globalAlpha = 1;
+  }
+  requestAnimationFrame(frame);
+}
+
+// ---------------------------------------------------------------------------
+// Game flow
+// ---------------------------------------------------------------------------
+const $ = (id) => document.getElementById(id);
+const screens = ["start", "play", "between", "final"];
+function show(id) { for (const s of screens) $(s).hidden = s !== id; }
+
+let game = null; // { daily, date, cats, round, results: [{cat, found:[ans], score}], index, found:Set, endAt, timerId }
+
+function refreshStart() {
+  const date = today(), played = store.nights[date];
+  $("nightLabel").textContent = `Night ${nightNumber(date)} · ${new Date().toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}`;
+  const streakAlive = store.lastDate === date || store.lastDate === yesterday();
+  $("stStreak").textContent = streakAlive ? store.streak : 0;
+  $("stBest").textContent = (store.best || 0).toLocaleString();
+  $("stPlayed").textContent = Object.keys(store.nights).length;
+  $("btnDaily").textContent = played ? "See tonight's result" : "Start tonight's sky";
+  $("startNote").textContent = played
+    ? `You charted ${played.score.toLocaleString()} ly tonight. A new sky opens at midnight. Practice skies are random and don't count.`
+    : "Tonight's sky is the same for everyone, and it changes at midnight. Practice skies are random and don't count.";
+}
+
+function startGame(daily) {
+  const date = today();
+  if (daily && store.nights[date]) { showFinal(store.nights[date].replay, true); return; }
+  const seed = daily ? hashStr("deep-sky:" + date) : (Math.random() * 2 ** 32) >>> 0;
+  game = { daily, date, cats: pickCategories(seed, daily ? date : null), round: 0, results: [] };
+  startRound();
+}
+
+function startRound() {
+  const cat = game.cats[game.round];
+  game.index = buildIndex(cat);
+  game.found = new Set();
+  game.foundList = [];
+  game.roundScore = 0;
+  skyStars = [];
+  $("roundLabel").textContent = `${game.daily ? "Tonight" : "Practice"} · Sky ${game.round + 1} of ${ROUNDS}`;
+  $("promptText").textContent = cat.prompt;
+  $("feedback").textContent = "";
+  updateScore();
+  show("play");
+  const input = $("guess"); input.value = ""; input.disabled = false; input.focus();
+  game.endAt = performance.now() + ROUND_SECONDS * 1000;
+  tick();
+}
+
+function totalSoFar() { return game.results.reduce((a, r) => a + r.score, 0) + (game.roundScore || 0); }
+function updateScore() { $("scoreNow").textContent = totalSoFar().toLocaleString(); }
+
+function tick() {
+  const left = Math.max(0, game.endAt - performance.now());
+  $("timerBar").style.transform = `scaleX(${left / (ROUND_SECONDS * 1000)})`;
+  $("timer").classList.toggle("low", left < 5000);
+  if (left <= 0) { endRound(); return; }
+  game.timerId = requestAnimationFrame(tick);
+}
+
+function feedback(html, cls) {
+  const f = $("feedback"); f.innerHTML = html; f.className = "feedback " + (cls || "");
+}
+
+$("guessForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (!game || $("play").hidden) return;
+  const input = $("guess"), raw = input.value.trim();
+  if (!raw) return;
+  input.value = "";
+  const ans = match(game.index, raw);
+  if (!ans) {
+    feedback(`“${escapeHtml(raw)}” isn't on tonight's chart`, "");
+    $("feedback").style.color = "var(--bad)";
+    input.classList.remove("shake"); void input.offsetWidth; input.classList.add("shake");
+    return;
+  }
+  $("feedback").style.color = "";
+  if (game.found.has(ans)) { feedback(`Already charted ${escapeHtml(ans.display)}`); return; }
+  game.found.add(ans); game.foundList.push(ans);
+  const t = TIER[ans.tier];
+  game.roundScore += t.pts;
+  addSkyStar(ans);
+  updateScore();
+  feedback(`<span class="${t.cls}">${escapeHtml(ans.display)} · ${t.name} <span class="pts">+${t.pts} ly</span></span>`);
+});
+
+function endRound() {
+  cancelAnimationFrame(game.timerId);
+  $("guess").disabled = true;
+  const cat = game.cats[game.round];
+  game.results.push({ id: cat.id, name: cat.name, score: game.roundScore, tiers: game.foundList.map((a) => a.tier), found: game.foundList.map((a) => [a.display, a.tier]) });
+
+  // round summary
+  $("betweenLabel").textContent = `Sky ${game.round + 1} of ${ROUNDS} charted`;
+  $("betweenTitle").textContent = cat.name;
+  $("bScore").textContent = game.roundScore.toLocaleString();
+  $("bCount").textContent = game.foundList.length;
+  $("bDeep").textContent = game.foundList.filter((a) => a.tier === 3).length;
+  const sorted = game.foundList.slice().sort((a, b) => b.tier - a.tier);
+  $("bFound").innerHTML = sorted.length
+    ? sorted.map((a) => `<span class="chip ${TIER[a.tier].cls}">${escapeHtml(a.display)}</span>`).join("")
+    : `<p class="muted">No stars this time. Even one answer counts.</p>`;
+  const missed = game.index.answers.filter((a) => a.tier >= 2 && !game.found.has(a));
+  shuffle(missed);
+  $("bMissed").innerHTML = missed.slice(0, 6).sort((a, b) => b.tier - a.tier)
+    .map((a) => `<span class="chip missed ${TIER[a.tier].cls}">${escapeHtml(a.display)}</span>`).join("");
+  $("btnNext").textContent = game.round + 1 < ROUNDS ? "Next sky" : "See tonight's chart";
+  show("between");
+  setTimeout(() => $("btnNext").focus(), 50);
+}
+
+$("btnNext").addEventListener("click", () => {
+  game.round++;
+  if (game.round < ROUNDS) startRound(); else finishGame();
+});
+
+function finishGame() {
+  const total = game.results.reduce((a, r) => a + r.score, 0);
+  const replay = { daily: game.daily, date: game.date, total, results: game.results };
+  if (game.daily) {
+    const date = game.date;
+    if (!store.nights[date]) {
+      store.streak = store.lastDate === yesterday() ? (store.streak || 0) + 1 : 1;
+      store.lastDate = date;
+    }
+    store.nights[date] = { score: total, replay };
+    store.best = Math.max(store.best || 0, total);
+    save(store);
+  }
+  skyStars = [];
+  showFinal(replay, false);
+}
+
+function shareText(replay) {
+  const head = replay.daily ? `Deep Sky · Night ${nightNumber(replay.date)}` : "Deep Sky · Practice";
+  const lines = replay.results.map((r) => {
+    const glyphs = r.tiers.slice().sort((a, b) => b - a).slice(0, 8).map((t) => SHARE_GLYPH[t]).join("") || "·";
+    return `${glyphs} ${r.score}`;
+  });
+  return `${head}\n${replay.total.toLocaleString()} ly\n${lines.join("\n")}`;
+}
+
+function showFinal(replay, revisiting) {
+  $("finalLabel").textContent = replay.daily ? `Night ${nightNumber(replay.date)} ${revisiting ? "· already charted" : "complete"}` : "Practice sky complete";
+  $("fTotal").textContent = replay.total.toLocaleString();
+  const deep = replay.results.reduce((a, r) => a + r.tiers.filter((t) => t === 3).length, 0);
+  const rarest = replay.results.flatMap((r) => r.found).sort((a, b) => b[1] - a[1])[0];
+  $("fLine").textContent = rarest
+    ? `${deep} deep-field find${deep === 1 ? "" : "s"}. Your faintest star: ${rarest[0]}.`
+    : "No stars tonight. Tomorrow's sky is a fresh start.";
+  $("fRows").innerHTML = replay.results.map((r) =>
+    `<div class="sum-row"><span>${escapeHtml(r.name)}</span><span>${r.score} ly · ${r.tiers.length} star${r.tiers.length === 1 ? "" : "s"}</span></div>`).join("");
+  $("shareText").textContent = shareText(replay);
+  $("copied").textContent = "";
+  game = game || {};
+  game.lastReplay = replay;
+  show("final");
+  setTimeout(() => $("btnShare").focus(), 50);
+}
+
+$("btnShare").addEventListener("click", async () => {
+  const text = $("shareText").textContent;
+  try { await navigator.clipboard.writeText(text); $("copied").textContent = "Copied. Paste it anywhere."; }
+  catch (e) {
+    const r = document.createRange(); r.selectNodeContents($("shareText"));
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    $("copied").textContent = "Selected. Press Ctrl+C or Cmd+C to copy.";
+  }
+});
+$("btnHome").addEventListener("click", () => { refreshStart(); show("start"); });
+$("btnDaily").addEventListener("click", () => startGame(true));
+$("btnPractice").addEventListener("click", () => startGame(false));
+
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function escapeHtml(s) { return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+async function boot() {
+  resize();
+  show("start");
+  requestAnimationFrame(frame);
+  $("btnDaily").disabled = $("btnPractice").disabled = true;
+  try {
+    const res = await fetch("skies.json", { cache: "no-cache" });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    CATEGORIES = data.categories; NIGHTS = data.nights || {};
+    $("btnDaily").disabled = $("btnPractice").disabled = false;
+    refreshStart();
+  } catch (e) {
+    refreshStart();
+    $("startNote").textContent = "Tonight's sky couldn't load. Check your connection and refresh the page.";
+  }
+}
+boot();
+</script>
+</body>
+</html>

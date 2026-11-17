@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Night Arcade</title>
+<meta name="description" content="Two small games for after dark: a new Deep Sky category challenge every night, and Firefly Dusk, an arcade dodger set in a rainstorm.">
+<meta property="og:title" content="Night Arcade">
+<meta property="og:description" content="A new Deep Sky every night, and a firefly that needs to stay dry.">
+<meta name="theme-color" content="#0a0f24">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%228%22%20fill%3D%22%230a0f24%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%225%22%20fill%3D%22%23ffcf6b%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2210%22%20fill%3D%22%23ffcf6b%22%20opacity%3D%22.25%22%2F%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Inter:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+  /* Layout: a single narrow column; the two games are the page, stacked as large tiles that wrap side by side on wide screens. Single-theme (night). */
+  :root {
+    --sky: #0a0f24;
+    --sky-2: #151c40;
+    --ink: #e8ecf8;
+    --ink-dim: #9aa3c4;
+    --line: rgba(232, 236, 248, 0.14);
+    --gold: #ffcf6b;
+    --firefly: #ffd65c;
+    --dusk: #3b2f5c;
+    --font-display: "Unbounded", "Avenir Next", system-ui, sans-serif;
+    --font-body: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    color-scheme: dark;
+  }
+  html { box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: inherit; }
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(120% 70% at 50% 0%, var(--sky-2), var(--sky) 70%);
+    background-color: var(--sky);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  canvas#stars { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  main {
+    position: relative;
+    width: min(920px, 100%);
+    margin: 0 auto;
+    padding-block: clamp(40px, 9vh, 96px) 48px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 36px;
+  }
+  header { display: grid; gap: 12px; max-width: 34rem; }
+  .eyebrow { font: 500 12px var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
+  h1 { margin: 0; font: 800 clamp(40px, 9vw, 72px)/0.95 var(--font-display); letter-spacing: -0.03em; text-wrap: balance; }
+  header p { margin: 0; color: var(--ink-dim); line-height: 1.6; font-size: 16px; }
+
+  .games { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 18px; }
+  .game {
+    position: relative;
+    display: grid;
+    grid-template-rows: 180px auto;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+    background: rgba(14, 20, 48, 0.7);
+    transition: transform .18s, border-color .2s;
+  }
+  .game:hover { transform: translateY(-3px); border-color: rgba(255, 207, 107, .45); }
+  .game:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .art { position: relative; overflow: hidden; }
+  .art canvas { width: 100%; height: 100%; display: block; }
+  .body { padding: 20px 22px 22px; display: grid; gap: 10px; }
+  .body h2 { margin: 0; font: 800 24px var(--font-display); letter-spacing: -0.01em; }
+  .body p { margin: 0; color: var(--ink-dim); line-height: 1.55; }
+  .meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-top: 4px; }
+  .status { font: 500 12px var(--font-mono); color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+  .status b { color: var(--ink); font-weight: 500; }
+  .play {
+    font: 700 14px var(--font-body);
+    padding: 9px 18px; border-radius: 999px;
+    background: var(--gold); color: #1a1530;
+  }
+  .game.firefly .play { background: var(--firefly); }
+  .tag { font: 500 11px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .game.firefly .tag { color: var(--firefly); }
+  footer { color: var(--ink-dim); font-size: 13px; }
+  @media (prefers-reduced-motion: reduce) { .game { transition: none; } }
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<main>
+  <header>
+    <span class="eyebrow" id="tonight">Tonight</span>
+    <h1>Night Arcade</h1>
+    <p>Two small games for after dark. A new sky to chart every night, and a firefly that needs to stay dry.</p>
+  </header>
+
+  <section class="games" aria-label="Games">
+    <a class="game" href="deep-sky/">
+      <div class="art"><canvas id="artSky" aria-hidden="true"></canvas></div>
+      <div class="body">
+        <span class="tag">Daily · new sky every night</span>
+        <h2>Deep Sky</h2>
+        <p>Five categories, thirty seconds each. Answers everyone knows stay close and dim. The obscure ones sit deep in the sky and score far more.</p>
+        <div class="meta">
+          <span class="status" id="skyStatus">Tonight's sky is open</span>
+          <span class="play">Chart tonight</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="game firefly" href="firefly/">
+      <div class="art"><canvas id="artFly" aria-hidden="true"></canvas></div>
+      <div class="body">
+        <span class="tag">Arcade · endless</span>
+        <h2>Firefly Dusk</h2>
+        <p>A storm rolls over the meadow. Weave through the rain, catch drifting pollen, and survive the gusts as the downpour gets heavier.</p>
+        <div class="meta">
+          <span class="status" id="flyStatus">No best score yet</span>
+          <span class="play">Take flight</span>
+        </div>
+      </div>
+    </a>
+  </section>
+
+  <footer>Scores stay in this browser. Nothing to sign up for.</footer>
+</main>
+
+<script>
+(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const pad = (n) => String(n).padStart(2, "0");
+  const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const now = new Date(), today = ymd(now);
+  const y = new Date(now); y.setDate(y.getDate() - 1);
+  const night = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(2026, 10, 17)) / 86400000) + 1;
+  document.getElementById("tonight").textContent = `Night ${night} · ${now.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}`;
+
+  // Progress from each game (same origin, so the games' own saved data is readable here).
+  try {
+    const sky = JSON.parse(localStorage.getItem("deep-sky-v1") || "{}");
+    const done = sky.nights && sky.nights[today];
+    const streak = sky.lastDate === today || sky.lastDate === ymd(y) ? sky.streak || 0 : 0;
+    const el = document.getElementById("skyStatus");
+    if (done) el.innerHTML = `Charted tonight: <b>${done.score.toLocaleString()} ly</b> · streak <b>${streak}</b>`;
+    else if (streak) el.innerHTML = `Streak <b>${streak}</b>. Keep it alive tonight`;
+  } catch (e) {}
+  try {
+    const best = parseInt(localStorage.getItem("firefly-dusk-best") || "0", 10);
+    if (best) document.getElementById("flyStatus").innerHTML = `Your best: <b>${best.toLocaleString()}</b>`;
+  } catch (e) {}
+
+  function rng(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function fit(c) {
+    const dpr = Math.min(devicePixelRatio || 1, 2), w = c.clientWidth, h = c.clientHeight;
+    c.width = w * dpr; c.height = h * dpr;
+    const ctx = c.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx, w, h };
+  }
+
+  // Background star field
+  const bg = document.getElementById("stars");
+  let bgStars = [], B;
+  function sizeBg() { B = fit(bg); const r = rng(3); bgStars = Array.from({ length: Math.round(B.w * B.h / 3200) }, () => ({ x: r() * B.w, y: r() * B.h, s: r() * 1.1 + .2, p: r() * 6.3 })); }
+
+  // Deep Sky tile: a little planisphere with tiered stars
+  const sky = document.getElementById("artSky");
+  const tierColors = ["#f4f1e6", "#8fc8ff", "#c49bff", "#ffcf6b"];
+  let S, skyStars = [];
+  function sizeSky() {
+    S = fit(sky); const r = rng(11);
+    skyStars = Array.from({ length: 26 }, (_, i) => {
+      const tier = i < 9 ? 0 : i < 17 ? 1 : i < 23 ? 2 : 3;
+      const band = [[.1, .3], [.3, .55], [.55, .78], [.78, .97]][tier];
+      const a = r() * 6.283, d = band[0] + r() * (band[1] - band[0]);
+      return { x: S.w / 2 + Math.cos(a) * d * S.w * .46, y: S.h / 2 + Math.sin(a) * d * S.h * .42, tier, p: r() * 6.3 };
+    });
+  }
+
+  // Firefly tile: dusk gradient, rain, one firefly drifting
+  const fly = document.getElementById("artFly");
+  let F, drops = [];
+  function sizeFly() { F = fit(fly); const r = rng(5); drops = Array.from({ length: 40 }, () => ({ x: r() * F.w, y: r() * F.h, v: 140 + r() * 80 })); }
+
+  function resize() { sizeBg(); sizeSky(); sizeFly(); }
+  addEventListener("resize", resize);
+  resize();
+
+  let last = performance.now();
+  function frame(t) {
+    const dt = Math.min(.05, (t - last) / 1000); last = t;
+    const { ctx } = B;
+    ctx.clearRect(0, 0, B.w, B.h);
+    for (const s of bgStars) { ctx.fillStyle = `rgba(232,236,248,${(reduce ? .5 : .35 + .3 * Math.sin(t / 900 + s.p)) * .7})`; ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, 6.283); ctx.fill(); }
+
+    const c = S.ctx;
+    c.clearRect(0, 0, S.w, S.h);
+    c.strokeStyle = "rgba(232,236,248,.08)";
+    for (const f of [.3, .55, .78, .97]) { c.beginPath(); c.ellipse(S.w / 2, S.h / 2, S.w * .46 * f, S.h * .42 * f, 0, 0, 6.283); c.stroke(); }
+    for (const s of skyStars) {
+      const tw = reduce ? 1 : .8 + .2 * Math.sin(t / 500 + s.p), col = tierColors[s.tier], R = (2 + s.tier * 1.4) * 4 * tw;
+      const g = c.createRadialGradient(s.x, s.y, 0, s.x, s.y, R);
+      g.addColorStop(0, col); g.addColorStop(.25, col + "88"); g.addColorStop(1, col + "00");
+      c.fillStyle = g; c.beginPath(); c.arc(s.x, s.y, R, 0, 6.283); c.fill();
+      c.fillStyle = "#fff"; c.beginPath(); c.arc(s.x, s.y, 1 + s.tier * .4, 0, 6.283); c.fill();
+    }
+
+    const f = F.ctx;
+    const g = f.createLinearGradient(0, 0, 0, F.h);
+    g.addColorStop(0, "#141a3a"); g.addColorStop(.7, "#3b2f5c"); g.addColorStop(1, "#b0607a");
+    f.fillStyle = g; f.fillRect(0, 0, F.w, F.h);
+    f.strokeStyle = "rgba(159,196,255,.6)"; f.lineWidth = 1.4; f.lineCap = "round";
+    for (const d of drops) {
+      if (!reduce) { d.y += d.v * dt; if (d.y > F.h) { d.y = -12; d.x = Math.random() * F.w; } }
+      f.beginPath(); f.moveTo(d.x, d.y - 12); f.lineTo(d.x, d.y); f.stroke();
+    }
+    f.fillStyle = "#0b0d1c"; f.fillRect(0, F.h - 18, F.w, 18);
+    const fx = F.w / 2 + (reduce ? 0 : Math.sin(t / 1300) * F.w * .22), fy = F.h * .55 + (reduce ? 0 : Math.sin(t / 700) * 14);
+    const fg = f.createRadialGradient(fx, fy, 0, fx, fy, 46);
+    fg.addColorStop(0, "rgba(255,240,170,.95)"); fg.addColorStop(.25, "rgba(255,214,92,.5)"); fg.addColorStop(1, "rgba(255,214,92,0)");
+    f.fillStyle = fg; f.beginPath(); f.arc(fx, fy, 46, 0, 6.283); f.fill();
+    f.fillStyle = "#fff3b8"; f.beginPath(); f.ellipse(fx, fy + 3, 4, 5, 0, 0, 6.283); f.fill();
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

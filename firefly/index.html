@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Firefly Dusk · Night Arcade</title>
+<meta name="description" content="Guide a firefly through a dusk rainstorm. Dodge the drops, catch pollen, chase your best score.">
+<meta property="og:title" content="Firefly Dusk">
+<meta property="og:description" content="Guide a firefly through a dusk rainstorm. Dodge the drops, catch pollen, chase your best score.">
+<meta name="theme-color" content="#0a0f24">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%228%22%20fill%3D%22%230a0f24%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%225%22%20fill%3D%22%23ffd65c%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2210%22%20fill%3D%22%23ffd65c%22%20opacity%3D%22.25%22%2F%3E%3C%2Fsvg%3E">
+<style>
+  html { box-sizing: border-box; }
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+  /* Layout: one full-bleed dusk canvas; HUD floats top, menus float centre. Deliberately single-theme (always dusk). */
+  :root {
+    --sky-top: #141a3a;
+    --sky-low: #3b2f5c;
+    --horizon: #b0607a;
+    --reed: #0b0d1c;
+    --glow: #ffd65c;
+    --glow-soft: rgba(255, 214, 92, 0.18);
+    --ink: #f3eedf;
+    --ink-dim: #b9b3cf;
+    --panel: rgba(16, 18, 44, 0.82);
+    --panel-edge: rgba(255, 214, 92, 0.28);
+    --rain: #9fc4ff;
+    --danger: #ff7a8a;
+    --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Atkinson Hyperlegible", "Helvetica Neue", Arial, system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--sky-top);
+    color: var(--ink);
+    font-family: var(--font-body);
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  #stage { position: relative; width: 100%; height: 100%; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: none; }
+  body.menu canvas { cursor: default; }
+
+  .hud {
+    position: absolute;
+    inset: 0 0 auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding-block: 14px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat { display: grid; gap: 2px; }
+  .stat .label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  .stat .value { font-family: var(--font-display); font-weight: 800; font-size: 26px; line-height: 1; }
+  .stat.right { text-align: right; justify-items: end; }
+  .lives { display: flex; gap: 6px; margin-top: 4px; }
+  .lives i {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--glow);
+    box-shadow: 0 0 10px var(--glow);
+    transition: opacity .3s, transform .3s;
+  }
+  .lives i.out { opacity: .18; box-shadow: none; transform: scale(.7); }
+  .gust {
+    position: absolute; left: 50%; top: 18px; transform: translateX(-50%);
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--rain); opacity: 0; transition: opacity .4s;
+  }
+  .gust.on { opacity: .9; }
+
+  .overlay {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .card {
+    width: min(420px, 100%);
+    background: var(--panel);
+    border: 1px solid var(--panel-edge);
+    border-radius: 18px;
+    padding: 26px 24px 22px;
+    display: grid; gap: 14px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .card h1, .card h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .card h1 { font-size: clamp(34px, 8vw, 46px); color: var(--glow); text-shadow: 0 0 24px rgba(255,214,92,.45); }
+  .card h2 { font-size: 30px; }
+  .card p { margin: 0; color: var(--ink-dim); line-height: 1.5; }
+  .keys { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; font-size: 13px; color: var(--ink-dim); }
+  kbd {
+    font-family: var(--font-body); font-size: 12px;
+    border: 1px solid rgba(243,238,223,.3); border-bottom-width: 2px;
+    border-radius: 5px; padding: 1px 6px; color: var(--ink);
+  }
+  .result { display: flex; justify-content: center; gap: 28px; font-variant-numeric: tabular-nums; }
+  .result .value { font-family: var(--font-display); font-weight: 800; font-size: 32px; }
+  .result .label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); }
+  .newbest { color: var(--glow); font-weight: 700; }
+  button {
+    justify-self: center;
+    font: 700 16px var(--font-body);
+    color: #1b1530;
+    background: var(--glow);
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 30px;
+    cursor: pointer;
+    box-shadow: 0 0 22px rgba(255,214,92,.4);
+    transition: transform .12s, box-shadow .2s;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(255,214,92,.6); }
+  button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    button, .lives i, .gust { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="game" aria-label="Firefly Dusk game area"></canvas>
+
+  <div class="hud" id="hud">
+    <div class="stat">
+      <span class="label">Score</span>
+      <span class="value" id="score">0</span>
+      <div class="lives" id="lives" aria-label="Lives"><i></i><i></i><i></i></div>
+    </div>
+    <div class="stat right">
+      <span class="label">Best</span>
+      <span class="value" id="best">0</span>
+    </div>
+  </div>
+  <div class="gust" id="gust">Gust incoming</div>
+
+  <div class="overlay" id="menu">
+    <div class="card">
+      <h1>Firefly Dusk</h1>
+      <p>A storm is rolling over the meadow. Keep your little light dry, and catch drifting pollen for bonus points.</p>
+      <div class="keys">
+        <span>Move with the <b>mouse</b>, <b>touch</b>, or <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd></span>
+        <span><kbd>P</kbd> pause</span>
+      </div>
+      <button id="startBtn" type="button">Take flight</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="over" hidden>
+    <div class="card">
+      <h2>Your light went out</h2>
+      <div class="result">
+        <div><div class="value" id="finalScore">0</div><div class="label">Score</div></div>
+        <div><div class="value" id="finalTime">0s</div><div class="label">Survived</div></div>
+        <div><div class="value" id="finalPollen">0</div><div class="label">Pollen</div></div>
+      </div>
+      <p id="bestLine"></p>
+      <button id="againBtn" type="button">Fly again</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="paused" hidden>
+    <div class="card">
+      <h2>Paused</h2>
+      <p>The rain waits for you.</p>
+      <button id="resumeBtn" type="button">Resume</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const ui = {
+    score: $("score"), best: $("best"), lives: $("lives").children, gust: $("gust"),
+    menu: $("menu"), over: $("over"), paused: $("paused"),
+    finalScore: $("finalScore"), finalTime: $("finalTime"), finalPollen: $("finalPollen"), bestLine: $("bestLine"),
+  };
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------- storage (best score) ----------
+  const BEST_KEY = "firefly-dusk-best";
+  let best = 0;
+  try { best = parseInt(localStorage.getItem(BEST_KEY) || "0", 10) || 0; } catch (e) {}
+  ui.best.textContent = best;
+  const saveBest = () => { try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {} };
+
+  // ---------- sizing ----------
+  let W = 0, H = 0, DPR = 1, groundY = 0;
+  let scenery = null; // offscreen sky + stars + reeds
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    groundY = H - Math.max(40, H * 0.08);
+    buildScenery();
+    if (player) { player.x = clamp(player.x, 0, W); player.y = clamp(player.y, 0, groundY); }
+  }
+
+  function buildScenery() {
+    scenery = document.createElement("canvas");
+    scenery.width = canvas.width; scenery.height = canvas.height;
+    const s = scenery.getContext("2d");
+    s.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const css = getComputedStyle(document.documentElement);
+    const g = s.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, css.getPropertyValue("--sky-top").trim());
+    g.addColorStop(0.62, css.getPropertyValue("--sky-low").trim());
+    g.addColorStop(1, css.getPropertyValue("--horizon").trim());
+    s.fillStyle = g; s.fillRect(0, 0, W, H);
+
+    // a few stars peeking through the clouds
+    const rnd = mulberry(7);
+    s.fillStyle = "rgba(243,238,223,0.55)";
+    for (let i = 0; i < Math.round(W * H / 14000); i++) {
+      const x = rnd() * W, y = rnd() * H * 0.45, r = rnd() * 1.1 + 0.2;
+      s.beginPath(); s.arc(x, y, r, 0, Math.PI * 2); s.fill();
+    }
+    // low cloud band
+    s.fillStyle = "rgba(20,26,58,0.55)";
+    for (let i = 0; i < 9; i++) {
+      const x = rnd() * W, y = rnd() * H * 0.18, rx = 120 + rnd() * 220, ry = 22 + rnd() * 26;
+      s.beginPath(); s.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); s.fill();
+    }
+    // meadow reeds silhouette
+    const reed = css.getPropertyValue("--reed").trim();
+    s.fillStyle = reed;
+    s.fillRect(0, groundY, W, H - groundY);
+    s.strokeStyle = reed; s.lineCap = "round";
+    for (let x = -10; x < W + 10; x += 4 + rnd() * 5) {
+      const h = 14 + rnd() * (H * 0.09), lean = (rnd() - 0.5) * 18;
+      s.lineWidth = 1.5 + rnd() * 2;
+      s.beginPath(); s.moveTo(x, groundY + 2);
+      s.quadraticCurveTo(x + lean * 0.3, groundY - h * 0.6, x + lean, groundY - h); s.stroke();
+      if (rnd() < 0.06) { // seed head
+        s.beginPath(); s.ellipse(x + lean, groundY - h - 6, 3, 8, lean / 60, 0, Math.PI * 2); s.fill();
+      }
+    }
+  }
+
+  // ---------- helpers ----------
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function distToSeg(px, py, ax, ay, bx, by) {
+    const dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy || 1;
+    const t = clamp(((px - ax) * dx + (py - ay) * dy) / l2, 0, 1);
+    const x = ax + t * dx - px, y = ay + t * dy - py;
+    return Math.sqrt(x * x + y * y);
+  }
+
+  // ---------- game state ----------
+  let state = "menu"; // menu | play | paused | over
+  let player, drops, motes, particles, time, pollen, lives, invuln, spawnAcc, moteAcc;
+  let wind, windTarget, gustTimer, gustWarn;
+  const pointer = { active: false, x: 0, y: 0 };
+  const keys = new Set();
+
+  function reset() {
+    player = { x: W / 2, y: groundY - 90, r: 9, vx: 0, vy: 0, trail: [] };
+    drops = []; motes = []; particles = [];
+    time = 0; pollen = 0; lives = 3; invuln = 0; spawnAcc = 0; moteAcc = 0;
+    wind = 0; windTarget = 0; gustTimer = 9; gustWarn = 0;
+    pointer.active = false;
+    updateLives();
+  }
+
+  function score() { return Math.floor(time * 10) + pollen * 50; }
+
+  function updateLives() {
+    for (let i = 0; i < ui.lives.length; i++) ui.lives[i].classList.toggle("out", i >= lives);
+  }
+
+  function show(name) {
+    state = name;
+    ui.menu.hidden = name !== "menu";
+    ui.over.hidden = name !== "over";
+    ui.paused.hidden = name !== "paused";
+    document.body.classList.toggle("menu", name !== "play");
+  }
+
+  function start() { reset(); show("play"); last = performance.now(); canvas.focus?.(); }
+
+  function gameOver() {
+    show("over");
+    const s = score();
+    ui.finalScore.textContent = s;
+    ui.finalTime.textContent = Math.floor(time) + "s";
+    ui.finalPollen.textContent = pollen;
+    if (s > best) {
+      best = s; saveBest(); ui.best.textContent = best;
+      ui.bestLine.innerHTML = '<span class="newbest">New best score.</span>';
+    } else {
+      ui.bestLine.textContent = `Best so far: ${best}. ${best - s} to beat it.`;
+    }
+    $("againBtn").focus();
+  }
+
+  // ---------- difficulty curve ----------
+  const spawnRate = () => Math.min(3 + time * 0.28, 26);      // drops per second
+  const fallSpeed = () => Math.min(230 + time * 6.5, 620);    // px per second
+
+  function spawnDrop() {
+    const sp = fallSpeed() * (0.85 + Math.random() * 0.3);
+    const margin = Math.abs(wind) * 1.2;
+    drops.push({
+      x: -margin + Math.random() * (W + margin * 2),
+      y: -20,
+      vy: sp,
+      len: 10 + sp * 0.03,
+      big: Math.random() < Math.min(0.04 + time * 0.002, 0.15),
+    });
+  }
+
+  function spawnMote() {
+    motes.push({
+      x: 40 + Math.random() * (W - 80),
+      y: 80 + Math.random() * (groundY - 160),
+      phase: Math.random() * Math.PI * 2,
+      life: 7,
+    });
+  }
+
+  function burst(x, y, color, n, speed) {
+    if (reduceMotion) n = Math.ceil(n / 3);
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2, v = speed * (0.3 + Math.random() * 0.7);
+      particles.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - speed * 0.3, life: 0.6 + Math.random() * 0.4, max: 1, color });
+    }
+  }
+
+  // ---------- update ----------
+  function update(dt) {
+    time += dt;
+
+    // wind gusts: warn, then push the rain sideways for a few seconds
+    gustTimer -= dt;
+    if (gustTimer <= 0 && windTarget === 0 && gustWarn <= 0) {
+      gustWarn = 1.4;
+      ui.gust.classList.add("on");
+    }
+    if (gustWarn > 0) {
+      gustWarn -= dt;
+      if (gustWarn <= 0) {
+        windTarget = (Math.random() < 0.5 ? -1 : 1) * Math.min(90 + time * 3, 260);
+        gustTimer = 4 + Math.random() * 2;
+        ui.gust.classList.remove("on");
+      }
+    } else if (windTarget !== 0 && gustTimer <= 0) {
+      windTarget = 0; gustTimer = 8 + Math.random() * 6;
+    }
+    wind += (windTarget - wind) * Math.min(1, dt * 1.5);
+
+    // player movement: keys take priority, else ease toward pointer
+    let kx = 0, ky = 0;
+    if (keys.has("ArrowLeft") || keys.has("a")) kx -= 1;
+    if (keys.has("ArrowRight") || keys.has("d")) kx += 1;
+    if (keys.has("ArrowUp") || keys.has("w")) ky -= 1;
+    if (keys.has("ArrowDown") || keys.has("s")) ky += 1;
+    if (kx || ky) {
+      const n = Math.hypot(kx, ky), sp = 330;
+      player.vx += ((kx / n) * sp - player.vx) * Math.min(1, dt * 12);
+      player.vy += ((ky / n) * sp - player.vy) * Math.min(1, dt * 12);
+      pointer.active = false;
+    } else if (pointer.active) {
+      const dx = pointer.x - player.x, dy = pointer.y - player.y;
+      player.vx = dx * 9; player.vy = dy * 9;
+      const max = 560, m = Math.hypot(player.vx, player.vy);
+      if (m > max) { player.vx *= max / m; player.vy *= max / m; }
+    } else {
+      player.vx *= Math.pow(0.02, dt); player.vy *= Math.pow(0.02, dt);
+    }
+    // a little hover bob so it feels alive
+    player.x = clamp(player.x + player.vx * dt, player.r, W - player.r);
+    player.y = clamp(player.y + player.vy * dt + Math.sin(time * 5) * 6 * dt, 40, groundY - player.r - 4);
+    player.trail.unshift({ x: player.x, y: player.y });
+    if (player.trail.length > 10) player.trail.pop();
+
+    if (invuln > 0) invuln -= dt;
+
+    // spawn rain
+    spawnAcc += dt * spawnRate();
+    while (spawnAcc >= 1) { spawnDrop(); spawnAcc -= 1; }
+
+    // spawn pollen
+    moteAcc += dt;
+    if (moteAcc > 2.6 && motes.length < 3) { spawnMote(); moteAcc = 0; }
+
+    // move rain + collide
+    const hitR = player.r * 0.75;
+    for (let i = drops.length - 1; i >= 0; i--) {
+      const d = drops[i];
+      d.x += wind * dt; d.y += d.vy * dt;
+      const tailX = d.x - (wind / d.vy) * d.len, tailY = d.y - d.len;
+      if (invuln <= 0 && distToSeg(player.x, player.y, tailX, tailY, d.x, d.y) < hitR + (d.big ? 4 : 1.5)) {
+        drops.splice(i, 1);
+        lives -= d.big ? 2 : 1;
+        invuln = 1.6;
+        updateLives();
+        burst(player.x, player.y, "#9fc4ff", 18, 180);
+        if (navigator.vibrate) { try { navigator.vibrate(40); } catch (e) {} }
+        if (lives <= 0) { lives = 0; updateLives(); burst(player.x, player.y, "#ffd65c", 30, 220); gameOver(); return; }
+        continue;
+      }
+      if (d.y > groundY) {
+        if (!reduceMotion && Math.random() < 0.35) {
+          particles.push({ x: d.x, y: groundY, vx: (Math.random() - 0.5) * 60, vy: -40 - Math.random() * 50, life: 0.35, max: 0.35, color: "#9fc4ff" });
+        }
+        drops.splice(i, 1);
+      }
+    }
+
+    // pollen
+    for (let i = motes.length - 1; i >= 0; i--) {
+      const m = motes[i];
+      m.life -= dt; m.phase += dt * 2;
+      m.x += Math.sin(m.phase) * 14 * dt + wind * 0.25 * dt;
+      m.y += Math.cos(m.phase * 0.7) * 10 * dt;
+      if (Math.hypot(m.x - player.x, m.y - player.y) < player.r + 12) {
+        pollen++;
+        burst(m.x, m.y, "#ffd65c", 14, 120);
+        motes.splice(i, 1);
+        continue;
+      }
+      if (m.life <= 0 || m.x < -20 || m.x > W + 20) motes.splice(i, 1);
+    }
+
+    // particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.life -= dt; p.vy += 300 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+
+    ui.score.textContent = score();
+  }
+
+  // ---------- draw ----------
+  function draw(now) {
+    ctx.drawImage(scenery, 0, 0, W, H);
+
+    // rain
+    ctx.lineCap = "round";
+    for (const d of drops) {
+      const tailX = d.x - (wind / d.vy) * d.len, tailY = d.y - d.len;
+      ctx.strokeStyle = d.big ? "rgba(190,215,255,0.95)" : "rgba(159,196,255,0.7)";
+      ctx.lineWidth = d.big ? 3.5 : 1.6;
+      ctx.beginPath(); ctx.moveTo(tailX, tailY); ctx.lineTo(d.x, d.y); ctx.stroke();
+      if (d.big) { ctx.fillStyle = "rgba(210,228,255,0.95)"; ctx.beginPath(); ctx.arc(d.x, d.y, 3, 0, Math.PI * 2); ctx.fill(); }
+    }
+
+    // pollen motes
+    for (const m of motes) {
+      const fade = Math.min(1, m.life / 1.2);
+      const pulse = 1 + Math.sin(now / 180 + m.phase) * 0.2;
+      const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, 16 * pulse);
+      g.addColorStop(0, `rgba(255,236,160,${0.95 * fade})`);
+      g.addColorStop(0.35, `rgba(255,214,92,${0.5 * fade})`);
+      g.addColorStop(1, "rgba(255,214,92,0)");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(m.x, m.y, 16 * pulse, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // particles
+    for (const p of particles) {
+      ctx.globalAlpha = Math.max(0, p.life / p.max);
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 1.8, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    if (state === "play" || state === "paused") drawFirefly(now);
+  }
+
+  function drawFirefly(now) {
+    const blink = invuln > 0 && Math.floor(now / 90) % 2 === 0;
+    const glowLevel = lives / 3;
+    // trail
+    for (let i = player.trail.length - 1; i > 0; i--) {
+      const t = player.trail[i];
+      ctx.fillStyle = `rgba(255,214,92,${0.12 * (1 - i / player.trail.length) * glowLevel})`;
+      ctx.beginPath(); ctx.arc(t.x, t.y, player.r * (1 - i / 14), 0, Math.PI * 2); ctx.fill();
+    }
+    if (blink) return;
+    const flicker = reduceMotion ? 1 : 0.9 + Math.sin(now / 70) * 0.06 + Math.sin(now / 23) * 0.04;
+    const R = (34 + 18 * glowLevel) * flicker;
+    const g = ctx.createRadialGradient(player.x, player.y + 3, 0, player.x, player.y + 3, R);
+    g.addColorStop(0, "rgba(255,240,170,0.9)");
+    g.addColorStop(0.25, `rgba(255,214,92,${0.35 + 0.2 * glowLevel})`);
+    g.addColorStop(1, "rgba(255,214,92,0)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(player.x, player.y + 3, R, 0, Math.PI * 2); ctx.fill();
+
+    // wings
+    const flap = reduceMotion ? 0.5 : (Math.sin(now / 28) + 1) / 2;
+    ctx.fillStyle = "rgba(220,225,255,0.55)";
+    for (const side of [-1, 1]) {
+      ctx.beginPath();
+      ctx.ellipse(player.x + side * 6, player.y - 4, 7, 3 + flap * 2.5, side * (0.5 + flap * 0.4), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // body + lit abdomen
+    ctx.fillStyle = "#2a2140";
+    ctx.beginPath(); ctx.ellipse(player.x, player.y - 3, 3.4, 5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#fff3b8";
+    ctx.beginPath(); ctx.ellipse(player.x, player.y + 4, 4, 5, 0, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // ---------- loop ----------
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    if (state === "play") update(dt);
+    else if (state === "menu" || state === "over") idle(dt);
+    draw(now);
+    requestAnimationFrame(frame);
+  }
+
+  // gentle rain behind the menus
+  function idle(dt) {
+    time = (time || 0) + dt;
+    spawnAcc = (spawnAcc || 0) + dt * 6;
+    while (spawnAcc >= 1) { drops.push({ x: Math.random() * W, y: -20, vy: 260 + Math.random() * 80, len: 16, big: false }); spawnAcc -= 1; }
+    for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i]; d.y += d.vy * dt; if (d.y > groundY) drops.splice(i, 1); }
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i]; p.life -= dt; p.vy += 300 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+    wind = 0;
+  }
+
+  // ---------- input ----------
+  function setPointer(e) {
+    const r = canvas.getBoundingClientRect();
+    pointer.x = e.clientX - r.left;
+    pointer.y = e.clientY - r.top - (e.pointerType === "touch" ? 46 : 0); // keep it above your finger
+    pointer.active = true;
+  }
+  canvas.addEventListener("pointermove", setPointer);
+  canvas.addEventListener("pointerdown", (e) => { setPointer(e); canvas.setPointerCapture?.(e.pointerId); });
+
+  const MOVE_KEYS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "a", "d", "w", "s"];
+  window.addEventListener("keydown", (e) => {
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (MOVE_KEYS.includes(k)) { keys.add(k); if (state === "play") e.preventDefault(); }
+    if (k === "p" || k === "Escape") { togglePause(); e.preventDefault(); }
+    if ((k === "Enter" || k === " ") && (state === "menu" || state === "over") && document.activeElement?.tagName !== "BUTTON") { start(); e.preventDefault(); }
+  });
+  window.addEventListener("keyup", (e) => keys.delete(e.key.length === 1 ? e.key.toLowerCase() : e.key));
+
+  function togglePause() {
+    if (state === "play") { show("paused"); $("resumeBtn").focus(); }
+    else if (state === "paused") { show("play"); last = performance.now(); }
+  }
+  document.addEventListener("visibilitychange", () => { if (document.hidden && state === "play") togglePause(); });
+  window.addEventListener("blur", () => { keys.clear(); if (state === "play") togglePause(); });
+
+  $("startBtn").addEventListener("click", start);
+  $("againBtn").addEventListener("click", start);
+  $("resumeBtn").addEventListener("click", togglePause);
+
+  // ---------- boot ----------
+  window.addEventListener("resize", resize);
+  resize();
+  reset();
+  show("menu");
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

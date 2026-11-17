@@ -1,0 +1,167 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "countries",
+      "name": "Countries",
+      "prompt": "Name countries",
+      "added": "2026-11-17",
+      "tiers": [
+        "United States=usa=us=america=united states of america|Canada|Mexico|Brazil|China|Japan|India|Russia|France|Germany|Italy|Spain|United Kingdom=uk=britain=great britain|Australia|Egypt|Argentina|South Africa|South Korea=korea|Ireland",
+        "Portugal|Netherlands=holland|Belgium|Switzerland|Austria|Sweden|Norway|Denmark|Finland|Poland|Greece|Turkey=turkiye|Israel|Iran|Iraq|Saudi Arabia|Pakistan|Afghanistan|Indonesia|Thailand|Vietnam|Philippines|Malaysia|Singapore|New Zealand|Nigeria|Kenya|Ethiopia|Morocco|Chile|Peru|Colombia|Venezuela|Cuba|Jamaica|Ukraine|North Korea|Iceland|Scotland|Wales|England|United Arab Emirates=uae|Qatar|Bangladesh|Nepal|Sri Lanka|Syria|Lebanon|Jordan|Czech Republic=czechia|Hungary|Romania|Croatia",
+        "Algeria|Tunisia|Libya|Sudan|Ghana|Senegal|Tanzania|Uganda|Rwanda|Somalia|Zimbabwe|Zambia|Angola|Mozambique|Madagascar|Cameroon|Ivory Coast=cote divoire|Republic of the Congo=congo|DR Congo=democratic republic of the congo=drc|Namibia|Botswana|Mali|Niger|Chad|Ecuador|Bolivia|Paraguay|Uruguay|Panama|Costa Rica|Guatemala|Honduras|Nicaragua|El Salvador|Haiti|Dominican Republic|Bahamas|Barbados|Trinidad and Tobago|Belize|Guyana|Suriname|Mongolia|Kazakhstan|Uzbekistan|Myanmar=burma|Cambodia|Laos|Taiwan|Kuwait|Bahrain|Oman|Yemen|Armenia|Georgia|Azerbaijan|Serbia|Bosnia and Herzegovina=bosnia|Slovenia|Slovakia|Bulgaria|Albania|North Macedonia=macedonia|Montenegro|Kosovo|Estonia|Latvia|Lithuania|Belarus|Moldova|Luxembourg|Monaco|Malta|Cyprus|Liechtenstein|Andorra|San Marino|Vatican City=vatican=holy see|Fiji|Papua New Guinea|Maldives|Bhutan|Brunei|East Timor=timor leste|Northern Ireland|Palestine",
+        "Burkina Faso|Benin|Togo|Guinea|Guinea-Bissau|Sierra Leone|Liberia|Gambia=the gambia|Mauritania|Cape Verde=cabo verde|Equatorial Guinea|Gabon|Central African Republic|South Sudan|Eritrea|Djibouti|Burundi|Malawi|Lesotho|Eswatini=swaziland|Comoros|Mauritius|Seychelles|Sao Tome and Principe|Tajikistan|Kyrgyzstan|Turkmenistan|Samoa|Tonga|Vanuatu|Solomon Islands|Kiribati|Tuvalu|Nauru|Palau|Marshall Islands|Micronesia|Saint Lucia|Saint Vincent and the Grenadines|Grenada|Dominica|Antigua and Barbuda|Saint Kitts and Nevis"
+      ]
+    },
+    {
+      "id": "elements",
+      "name": "Chemical elements",
+      "prompt": "Name chemical elements",
+      "added": "2026-11-17",
+      "tiers": [
+        "Hydrogen|Oxygen|Carbon|Nitrogen|Helium|Gold|Silver|Iron|Copper|Lead|Aluminium=aluminum|Sodium|Calcium|Uranium|Neon|Zinc|Platinum|Mercury|Chlorine|Potassium|Tin",
+        "Lithium|Magnesium|Silicon|Sulfur=sulphur|Phosphorus|Fluorine|Iodine|Argon|Nickel|Titanium|Cobalt|Chromium|Plutonium|Radium|Tungsten|Krypton|Xenon|Radon|Boron|Manganese|Arsenic|Beryllium|Bromine|Caesium=cesium",
+        "Vanadium|Gallium|Germanium|Selenium|Rubidium|Strontium|Zirconium|Molybdenum|Palladium|Cadmium|Indium|Antimony|Tellurium|Barium|Osmium|Iridium|Bismuth|Polonium|Francium|Thorium|Americium|Einsteinium|Scandium|Niobium|Tantalum|Rhodium|Neptunium|Curium|Californium|Fermium|Nobelium|Lanthanum|Cerium|Neodymium|Astatine|Actinium|Yttrium",
+        "Technetium|Ruthenium|Hafnium|Rhenium|Thallium|Praseodymium|Promethium|Samarium|Europium|Gadolinium|Terbium|Dysprosium|Holmium|Erbium|Thulium|Ytterbium|Lutetium|Protactinium|Berkelium|Mendelevium|Lawrencium|Rutherfordium|Dubnium|Seaborgium|Bohrium|Hassium|Meitnerium|Darmstadtium|Roentgenium|Copernicium|Nihonium|Flerovium|Moscovium|Livermorium|Tennessine|Oganesson"
+      ]
+    },
+    {
+      "id": "constellations",
+      "name": "Constellations",
+      "prompt": "Name constellations",
+      "added": "2026-11-17",
+      "tiers": [
+        "Orion|Ursa Major=big dipper=great bear|Ursa Minor=little dipper=little bear|Cassiopeia|Scorpius=scorpio|Leo|Taurus|Gemini|Cancer|Aries|Virgo|Libra|Sagittarius|Capricornus=capricorn|Aquarius|Pisces",
+        "Draco|Pegasus|Andromeda|Cygnus|Lyra|Aquila|Perseus|Hercules|Cepheus|Centaurus|Canis Major|Canis Minor|Bootes|Auriga|Crux=southern cross|Ophiuchus|Cetus|Phoenix|Hydra|Lupus|Corona Borealis|Delphinus",
+        "Lepus|Monoceros|Columba|Eridanus|Carina|Triangulum|Sagitta|Corona Australis|Ara|Pavo|Grus|Tucana|Vela|Puppis|Corvus|Crater|Lynx|Leo Minor|Lacerta|Vulpecula|Serpens|Scutum|Piscis Austrinus|Coma Berenices|Canes Venatici|Camelopardalis",
+        "Pyxis|Antlia|Sextans|Equuleus|Fornax|Sculptor|Caelum|Horologium|Reticulum|Dorado|Pictor|Volans|Chamaeleon|Apus|Musca|Circinus|Norma|Triangulum Australe|Telescopium|Indus|Microscopium|Octans|Mensa|Hydrus"
+      ]
+    },
+    {
+      "id": "languages",
+      "name": "Programming languages",
+      "prompt": "Name programming languages",
+      "added": "2026-11-17",
+      "tiers": [
+        "Python|JavaScript=js|Java|C|C++=cpp|C#=csharp=c sharp|HTML|CSS|SQL|Ruby|PHP|Swift|Go=golang|TypeScript=ts|Rust|Kotlin",
+        "R|Perl|Scala|Haskell|Lua|Dart|MATLAB|Bash=shell|Assembly=asm|Objective-C=objc=objective c|Visual Basic=vb|Fortran|COBOL|Lisp|Elixir|Erlang|Julia|Groovy|PowerShell|F#=fsharp=f sharp|Clojure|Pascal|Delphi",
+        "OCaml|Prolog|Scheme|Racket|Smalltalk|Ada|Zig|Nim|Crystal|Elm|Solidity|BASIC|Logo|Scratch|SAS|VBA|CoffeeScript|ActionScript|D|Haxe|Tcl|Awk|PureScript|Gleam|Mojo|Verilog|VHDL|Wolfram=mathematica|Hack|Vala|Apex|ABAP|Lean|Coq",
+        "APL|Forth|Simula|ALGOL|Modula-2=modula 2=modula|RPG|MUMPS=m|J|K|Q|Idris|Agda|Odin|V|Carbon|Raku|Pony|Red|Rebol|Io|Factor|Eiffel|Oberon|Chapel|Ballerina|Befunge|Malbolge"
+      ]
+    },
+    {
+      "id": "fruits",
+      "name": "Fruits",
+      "prompt": "Name fruits",
+      "added": "2026-11-17",
+      "tiers": [
+        "Apple|Banana|Orange|Grape|Strawberry|Watermelon|Pineapple|Mango|Peach|Pear|Cherry|Lemon|Lime|Blueberry|Raspberry|Kiwi=kiwifruit|Coconut|Plum|Avocado|Tomato|Melon",
+        "Apricot|Cantaloupe|Honeydew|Grapefruit|Pomegranate|Fig|Date|Papaya|Blackberry|Cranberry|Nectarine|Tangerine|Clementine|Mandarin|Guava|Passion fruit=passionfruit|Lychee=litchi|Dragon fruit=pitaya|Persimmon|Gooseberry|Currant=blackcurrant|Olive|Starfruit=carambola|Mulberry|Elderberry",
+        "Jackfruit|Durian|Rambutan|Mangosteen|Quince|Kumquat|Longan|Loquat|Tamarind|Plantain|Feijoa|Soursop=guanabana|Cherimoya=custard apple|Yuzu|Boysenberry|Lingonberry|Huckleberry|Acai|Goji berry=goji|Physalis=cape gooseberry=ground cherry|Pawpaw|Pomelo|Bergamot|Blood orange|Damson|Sloe|Loganberry|Breadfruit|Calamansi|Bilberry|Ugli fruit",
+        "Jabuticaba|Salak=snake fruit|Medlar|Cloudberry|Kiwano=horned melon|Santol|Langsat|Cupuacu|Sapodilla|Miracle fruit|Buddha's hand|Ackee|Tayberry|Marionberry|Noni|Mamey|Lucuma|Rambai|Bael|Jambul"
+      ]
+    },
+    {
+      "id": "dogs",
+      "name": "Dog breeds",
+      "prompt": "Name dog breeds",
+      "added": "2026-11-17",
+      "tiers": [
+        "Labrador=labrador retriever=lab|Golden Retriever|German Shepherd|Poodle|Bulldog|Beagle|Chihuahua|Husky=siberian husky|Pug|Dachshund=sausage dog|Rottweiler|Boxer|Pit Bull=pitbull|Corgi|Shih Tzu|Dalmatian|Great Dane|Border Collie|Yorkshire Terrier=yorkie",
+        "French Bulldog=frenchie|Doberman=dobermann|Pomeranian|Maltese|Cocker Spaniel|Shiba Inu|Saint Bernard=st bernard|Bernese Mountain Dog|Greyhound|Australian Shepherd|Collie|Schnauzer|Boston Terrier|Bichon Frise|Cavalier King Charles Spaniel=cavalier|Chow Chow|Akita|Samoyed|Alaskan Malamute=malamute|Jack Russell=jack russell terrier|Basset Hound|Bloodhound|Newfoundland|Mastiff|Whippet|Weimaraner|Vizsla|Papillon|Havanese|Pekingese|Shar Pei|Bull Terrier|West Highland Terrier=westie=west highland white terrier|Scottish Terrier=scottie",
+        "Afghan Hound|Borzoi|Saluki|Basenji|Rhodesian Ridgeback|Irish Wolfhound|Great Pyrenees|Leonberger|Bullmastiff|Cane Corso|Belgian Malinois=malinois|Keeshond|Lhasa Apso|Shetland Sheepdog=sheltie|Old English Sheepdog|Airedale Terrier=airedale|Staffordshire Bull Terrier=staffy|Italian Greyhound|Pointer|English Setter|Irish Setter|Springer Spaniel|Brittany|Chinese Crested|Tibetan Mastiff|Coonhound|Dogo Argentino|Anatolian Shepherd|Norwegian Elkhound",
+        "Puli|Komondor|Bedlington Terrier|Dandie Dinmont Terrier=dandie dinmont|Otterhound|Lagotto Romagnolo|Kuvasz|Briard|Plott Hound|Catahoula|Schipperke|Affenpinscher|Brussels Griffon|Finnish Spitz|Azawakh|Mudi|Sloughi|Bergamasco|Xoloitzcuintli=xolo|Kangal"
+      ]
+    },
+    {
+      "id": "instruments",
+      "name": "Musical instruments",
+      "prompt": "Name musical instruments",
+      "added": "2026-11-17",
+      "tiers": [
+        "Piano|Guitar|Drums=drum|Violin|Flute|Trumpet|Saxophone=sax|Cello|Clarinet|Harp|Bass guitar=bass|Keyboard|Ukulele|Harmonica|Trombone|Tuba|Banjo|Accordion|Xylophone|Tambourine|Triangle|Organ",
+        "Viola|Double bass=upright bass=contrabass|Oboe|Bassoon|French horn=horn|Piccolo|Cymbals=cymbal|Mandolin|Bagpipes=bagpipe|Recorder|Synthesizer=synth|Glockenspiel|Marimba|Timpani|Bongos=bongo|Congas=conga|Cowbell|Maracas|Castanets|Sitar|Didgeridoo|Kazoo|Harpsichord|Steel drum=steel pan|Tabla|Djembe|Bugle|Cornet|Euphonium|Sousaphone|Lute|Lyre|Ocarina|Theremin|Vibraphone=vibes|Kalimba=thumb piano|Pan flute=panpipes",
+        "Balalaika|Bouzouki|Shamisen|Koto|Erhu|Pipa|Guzheng|Oud|Santoor|Veena|Tanpura|Dhol|Bodhran|Cajon|Handpan=hang drum|Zither|Dulcimer|Autoharp|Melodica|Cor anglais=english horn|Flugelhorn|Harmonium|Celesta|Tubular bells=chimes|Gong|Washboard|Jaw harp=jew's harp|Concertina|Shakuhachi|Taiko|Gamelan|Talking drum|Rubab|Sarangi",
+        "Shawm|Crumhorn|Sackbut|Ondes Martenot|Glass harmonica|Morin khuur|Angklung|Zurna|Duduk|Ney|Mbira|Kora|Sarod|Shehnai|Mridangam|Hurdy-gurdy=hurdy gurdy|Mellophone|Contrabassoon|Bandoneon|Cuatro|Charango|Serpent|Ophicleide|Nyckelharpa|Kantele"
+      ]
+    },
+    {
+      "id": "greek",
+      "name": "Greek gods & titans",
+      "prompt": "Name Greek gods, titans or primordial deities",
+      "added": "2026-11-17",
+      "tiers": [
+        "Zeus|Poseidon|Hades|Athena|Apollo|Aphrodite|Ares|Hermes|Hera|Artemis|Dionysus|Heracles=hercules",
+        "Hephaestus|Demeter|Hestia|Persephone|Eros|Nike|Pan|Cronus=kronos|Gaia=gaea|Uranus=ouranos|Atlas|Prometheus|Helios|Selene|Eos|Nemesis|Hypnos|Thanatos|Morpheus|Rhea",
+        "Hecate|Iris|Tyche|Nyx|Erebus|Chaos|Oceanus|Tethys|Hyperion|Themis|Mnemosyne|Epimetheus|Asclepius|Hebe|Triton|Proteus|Nereus|Aeolus|Boreas|Zephyrus|Harmonia|Deimos|Phobos|Eris|Metis|Leto|Maia|Styx|Charon|Tartarus|Thetis|Dione|Phoebe|Kratos",
+        "Coeus|Crius|Iapetus|Notus|Eurus|Pheme|Bia|Zelus|Achelous|Ananke|Aether|Hemera|Pontus|Enyo|Plutus|Priapus|Hymenaeus=hymen|Astraeus|Pallas|Perses|Eurybia|Phorcys|Ceto|Thaumas|Nomos|Momus|Hesperus|Eosphorus=phosphorus"
+      ]
+    },
+    {
+      "id": "cars",
+      "name": "Car brands",
+      "prompt": "Name car brands",
+      "added": "2026-11-17",
+      "tiers": [
+        "Toyota|Ford|Honda|BMW|Mercedes-Benz=mercedes|Tesla|Chevrolet=chevy|Audi|Volkswagen=vw|Ferrari|Lamborghini|Porsche|Nissan|Hyundai|Kia|Jeep|Mazda|Subaru|Volvo|Jaguar|Land Rover=range rover|Dodge",
+        "Lexus|Cadillac|Buick|GMC|Chrysler|Lincoln|Mitsubishi|Suzuki|Fiat|Peugeot|Renault|Citroen|Skoda|SEAT|Mini|Bentley|Rolls-Royce=rolls royce|Aston Martin|Maserati|Alfa Romeo|Bugatti|McLaren|Lotus|Infiniti|Acura|Genesis|Ram|Polestar|Rivian|Lucid|Opel|Vauxhall|Smart|Dacia|BYD|Tata|Mahindra|Saab|Pontiac|Hummer",
+        "Koenigsegg|Pagani|Lancia|Alpine|Cupra|DS|Geely|Chery|Great Wall|NIO|XPeng|Li Auto|Holden|Oldsmobile|Plymouth|Saturn|Mercury|DeLorean=de lorean|Lada|Maybach|Morgan|Rimac|Fisker|Scion|Isuzu|Daihatsu|Datsun|Abarth|SsangYong=kgm|Maruti Suzuki=maruti|VinFast|Zeekr|Lynk & Co=lynk and co=lynk",
+        "Trabant|Wartburg|Zastava|Spyker|Ariel|Noble|Caterham|TVR|Hongqi|Togg|Packard|Studebaker|Perodua|Proton|Karma|Hispano-Suiza=hispano suiza|Lagonda|Bristol|Tatra|Moskvitch|Hindustan|Iso|De Tomaso|Vector|Saleen"
+      ]
+    },
+    {
+      "id": "sports",
+      "name": "Sports",
+      "prompt": "Name sports",
+      "added": "2026-11-17",
+      "tiers": [
+        "Football=soccer|Basketball|Baseball|Tennis|Golf|Cricket|Ice hockey=hockey|Rugby|Volleyball|Boxing|Swimming|American football|Running|Cycling|Skiing|Badminton|Table tennis=ping pong|Wrestling|Surfing|Skateboarding|Snowboarding|Gymnastics",
+        "Lacrosse|Softball|Handball|Water polo|Polo|Fencing|Archery|Rowing|Sailing|Judo|Karate|Taekwondo|MMA=mixed martial arts|Weightlifting|Powerlifting|Athletics=track and field|Marathon|Triathlon|Diving|Bowling|Darts|Snooker|Pool=billiards|Squash|Field hockey|Curling|Bobsleigh=bobsled|Luge|Skeleton|Figure skating|Speed skating|Climbing=rock climbing|Kayaking|Canoeing|Equestrian|Horse racing|Formula 1=f1=motor racing=motorsport|NASCAR|Futsal|Ultimate frisbee=ultimate|Dodgeball|Kickboxing|Pickleball|Padel",
+        "Biathlon|Modern pentathlon=pentathlon|Decathlon|Heptathlon|Kabaddi|Hurling|Gaelic football|Australian rules football=aussie rules=afl|Netball|Floorball|Petanque=boules|Bocce|Croquet|Lawn bowls|Kendo|Sumo|Muay Thai|Capoeira|Jiu-jitsu=bjj=jiu jitsu|Wushu|Orienteering|Parkour|Paragliding|Hang gliding|Skydiving|BMX|Motocross|Rally=rallying|Cross-country skiing|Ski jumping|Artistic swimming=synchronized swimming|Trampoline|Rhythmic gymnastics|Roller derby|Racquetball|Rugby league|Rugby union|Cornhole|Disc golf|Kitesurfing=kite surfing|Wakeboarding",
+        "Sepak takraw|Korfball|Bandy|Shinty|Buzkashi|Chess boxing=chessboxing|Underwater hockey|Real tennis|Fives|Teqball|Footvolley|Jai alai=pelota|Nordic combined|Sambo|Quadball=quidditch|Hornussen|Kin-ball=kinball|Sipa|Pato|Glima|Bossaball|Calcio storico|Tchoukball|Underwater rugby"
+      ]
+    },
+    {
+      "id": "vegetables",
+      "name": "Vegetables",
+      "prompt": "Name vegetables",
+      "added": "2026-11-17",
+      "tiers": [
+        "Carrot|Potato|Onion|Broccoli|Lettuce|Tomato|Cucumber|Spinach|Corn=sweetcorn|Peas=pea|Celery|Cabbage|Cauliflower|Garlic|Bell pepper=pepper|Mushroom|Pumpkin|Green beans=beans=bean|Eggplant=aubergine|Zucchini=courgette|Sweet potato",
+        "Asparagus|Kale|Beetroot=beet|Radish|Turnip|Leek|Artichoke|Brussels sprouts=brussels sprout|Okra|Squash|Yam|Parsnip|Swiss chard=chard|Arugula=rocket|Bok choy=pak choi|Shallot|Spring onion=scallion=green onion|Ginger|Chili pepper=chili=chilli|Jalapeno|Edamame|Lentils=lentil|Chickpeas=chickpea|Fennel|Watercress",
+        "Kohlrabi|Rutabaga=swede|Celeriac|Jicama|Daikon|Taro|Cassava=yuca=manioc|Endive|Radicchio|Jerusalem artichoke=sunchoke|Fiddleheads=fiddlehead|Romanesco|Bitter melon=bitter gourd=karela|Chayote|Lotus root|Water chestnut|Bamboo shoots=bamboo shoot|Collard greens=collards|Mustard greens|Dandelion greens|Nettle|Sorrel|Gai lan=kai lan=chinese broccoli|Galangal|Horseradish|Wasabi|Broccolini|Garlic scapes|Ramps=wild garlic",
+        "Salsify|Cardoon|Purslane|Ulluco|Oca|Yacon|Skirret|Crosne|Malanga|Samphire|Mizuna|Tatsoi|Burdock=gobo|Celtuce|Mashua|Arracacha|Scorzonera|Good King Henry|Sea kale|Orache"
+      ]
+    }
+  ],
+  "nights": {
+    "2026-11-17": [
+      "cars",
+      "instruments",
+      "countries",
+      "languages",
+      "greek"
+    ],
+    "2026-11-18": [
+      "vegetables",
+      "fruits",
+      "constellations",
+      "elements",
+      "dogs"
+    ],
+    "2026-11-19": [
+      "languages",
+      "cars",
+      "sports",
+      "instruments",
+      "countries"
+    ],
+    "2026-11-20": [
+      "fruits",
+      "constellations",
+      "vegetables",
+      "greek",
+      "elements"
+    ]
+  }
+}
