@@ -144,6 +144,18 @@
         "The Valley of Fear|The Gloria Scott=The Adventure of the Gloria Scott|The Stockbroker's Clerk|The Reigate Squires=The Reigate Puzzle=The Adventure of the Reigate Squires|The Resident Patient|The Adventure of the Norwood Builder=The Norwood Builder|The Adventure of the Solitary Cyclist=The Solitary Cyclist|The Adventure of the Priory School=The Priory School|The Adventure of Black Peter=Black Peter|The Adventure of Charles Augustus Milverton=Charles Augustus Milverton|The Adventure of the Three Students=The Three Students|The Adventure of the Golden Pince-Nez=The Golden Pince-Nez=The Golden Pin|The Adventure of the Missing Three-Quarter=The Missing Three-Quarter|The Adventure of the Abbey Grange=The Abbey Grange|The Adventure of the Second Stain=The Second Stain|The Adventure of the Cardboard Box=The Cardboard Box|The Wisteria Lodge=The Adventure of Wisteria Lodge|The Adventure of the Bruce-Partington Plans=The Bruce-Partington Plans|The Adventure of the Dying Detective=The Dying Detective|The Adventure of the Devil's Foot=The Devil's Foot",
         "The Disappearance of Lady Frances Carfax=The Adventure of the Disappearance of Lady Frances Carfax|His Last Bow=The Adventure of His Last Bow|The Adventure of the Red Circle=The Red Circle|The Adventure of the Illustrious Client=The Illustrious Client|The Adventure of the Blanched Soldier=The Blanched Soldier|The Adventure of the Mazarin Stone=The Mazarin Stone|The Adventure of the Three Gables=The Three Gables|The Adventure of the Sussex Vampire=The Sussex Vampire|The Adventure of the Three Garridebs=The Three Garridebs|The Adventure of Thor Bridge=Thor Bridge|The Adventure of the Creeping Man=The Creeping Man|The Adventure of the Lion's Mane=The Lion's Mane|The Adventure of the Veiled Lodger=The Veiled Lodger|The Adventure of Shoscombe Old Place=Shoscombe Old Place|The Adventure of the Retired Colourman=The Retired Colourman"
       ]
+    },
+    {
+      "id": "pasta-shapes",
+      "name": "Pasta shapes",
+      "prompt": "Name pasta shapes",
+      "added": "2026-11-19",
+      "tiers": [
+        "Spaghetti|Penne|Macaroni|Fusilli|Farfalle|Ravioli|Lasagne=lasagna|Linguine|Fettuccine|Rigatoni|Tortellini|Conchiglie",
+        "Bucatini|Tagliatelle|Pappardelle|Orecchiette|Orzo|Cavatappi|Cannelloni|Ziti|Ditalini|Vermicelli|Angel hair|Elbow macaroni|Casarecce|Mafaldine|Fregola|Gemelli|Rotelle|Manicotti|Campanelle|Tortelloni",
+        "Garganelli|Paccheri|Calamarata|Lumache|Radiatori|Sedanini|Mezze maniche|Mezzi rigatoni|Spaghetti alla chitarra|Taglierini|Trenette|Scialatielli|Malloreddus|Cavatelli|Pici|Bigoli|Anelli|Anellini|Ditaloni|Tubetti|Acini di pepe|Stelline|Fusilli bucati|Sagne|Trecce|Pizzoccheri|Cappelletti|Agnolotti|Mezzelune|Strozzapreti",
+        "Creste di gallo|Ricciutelle|Sorpresine|Quadretti|Tripolini|Corallini|Grattini|Puntine|Rombi|Maltagliati|Foglie d'ulivo|Gigli|Lorighittas|Su filindeu|Culurgiones|Sacchetti|Cappellacci|Fazzoletti|Strascinati|Cencioni|Croxetti|Sagne ncannulate|Fileja|Busiata|Torchietti"
+      ]
     }
   ],
   "nights": {
@@ -174,6 +186,20 @@
       "vegetables",
       "greek",
       "elements"
+    ],
+    "2026-11-21": [
+      "sherlock-holmes-canon",
+      "dogs",
+      "pasta-shapes",
+      "sports",
+      "cars"
+    ],
+    "2026-11-22": [
+      "countries",
+      "vegetables",
+      "instruments",
+      "greek",
+      "languages"
     ]
   }
 }
