@@ -156,6 +156,18 @@
         "Garganelli|Paccheri|Calamarata|Lumache|Radiatori|Sedanini|Mezze maniche|Mezzi rigatoni|Spaghetti alla chitarra|Taglierini|Trenette|Scialatielli|Malloreddus|Cavatelli|Pici|Bigoli|Anelli|Anellini|Ditaloni|Tubetti|Acini di pepe|Stelline|Fusilli bucati|Sagne|Trecce|Pizzoccheri|Cappelletti|Agnolotti|Mezzelune|Strozzapreti",
         "Creste di gallo|Ricciutelle|Sorpresine|Quadretti|Tripolini|Corallini|Grattini|Puntine|Rombi|Maltagliati|Foglie d'ulivo|Gigli|Lorighittas|Su filindeu|Culurgiones|Sacchetti|Cappellacci|Fazzoletti|Strascinati|Cencioni|Croxetti|Sagne ncannulate|Fileja|Busiata|Torchietti"
       ]
+    },
+    {
+      "id": "gemstones",
+      "name": "Gemstones",
+      "prompt": "Name gemstones",
+      "added": "2026-11-20",
+      "tiers": [
+        "Diamond|Ruby|Sapphire|Emerald|Amethyst|Opal|Pearl|Turquoise|Garnet|Aquamarine|Topaz|Jade|Amber|Peridot|Citrine",
+        "Moonstone|Onyx|Lapis lazuli|Tourmaline|Zircon|Spinel|Alexandrite|Coral|Obsidian|Malachite|Agate|Jasper|Carnelian|Bloodstone|Chrysoprase|Sodalite|Fluorite|Sunstone|Iolite|Morganite|Tiger's eye",
+        "Ametrine|Apatite|Andalusite|Azurite|Beryl|Chrysoberyl|Diopside|Enstatite|Labradorite|Larimar|Lepidolite|Moldavite|Pietersite|Prehnite|Rhodochrosite|Rhodonite|Scapolite|Sphalerite|Sugilite|Variscite|Vesuvianite|Zoisite|Charoite|Serpentine|Howlite",
+        "Amblygonite|Axinite|Benitoite|Clinohumite|Danburite|Datolite|Eudialyte|Grandidierite|Hambergite|Jeremejevite|Kornerupine|Painite|Pezzottaite|Poudretteite|Serendibite|Taaffeite|Titanite|Uvarovite|Wulfenite|Zincite"
+      ]
     }
   ],
   "nights": {
@@ -200,6 +212,13 @@
       "instruments",
       "greek",
       "languages"
+    ],
+    "2026-11-23": [
+      "gemstones",
+      "elements",
+      "fruits",
+      "cars",
+      "constellations"
     ]
   }
 }
