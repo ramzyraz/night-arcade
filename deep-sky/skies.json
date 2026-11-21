@@ -168,6 +168,18 @@
         "Ametrine|Apatite|Andalusite|Azurite|Beryl|Chrysoberyl|Diopside|Enstatite|Labradorite|Larimar|Lepidolite|Moldavite|Pietersite|Prehnite|Rhodochrosite|Rhodonite|Scapolite|Sphalerite|Sugilite|Variscite|Vesuvianite|Zoisite|Charoite|Serpentine|Howlite",
         "Amblygonite|Axinite|Benitoite|Clinohumite|Danburite|Datolite|Eudialyte|Grandidierite|Hambergite|Jeremejevite|Kornerupine|Painite|Pezzottaite|Poudretteite|Serendibite|Taaffeite|Titanite|Uvarovite|Wulfenite|Zincite"
       ]
+    },
+    {
+      "id": "us-national-parks",
+      "name": "U.S. national parks",
+      "prompt": "Name U.S. national parks",
+      "added": "2026-11-21",
+      "tiers": [
+        "Yosemite|Yellowstone|Grand Canyon|Zion|Grand Teton|Rocky Mountain|Great Smoky Mountains=Great Smokies|Acadia|Glacier|Olympic|Joshua Tree|Death Valley",
+        "Bryce Canyon|Arches|Sequoia|Redwood|Mount Rainier|Everglades|Denali|Crater Lake|Hawaiʻi Volcanoes|White Sands|Badlands|Shenandoah|Canyonlands|Capitol Reef|Mammoth Cave|Glacier Bay",
+        "Big Bend|Biscayne|Carlsbad Caverns|Channel Islands|Congaree|Cuyahoga Valley|Dry Tortugas|Great Basin|Great Sand Dunes|Guadalupe Mountains|Haleakalā|Hot Springs|Indiana Dunes|Isle Royale|Kings Canyon|Lassen Volcanic|Mesa Verde|New River Gorge|North Cascades|Petrified Forest",
+        "National Park of American Samoa|Black Canyon of the Gunnison|Gates of the Arctic|Gateway Arch|Katmai|Kenai Fjords|Kobuk Valley|Lake Clark|Pinnacles|Saguaro|Theodore Roosevelt|Virgin Islands|Voyageurs|Wind Cave|Wrangell–St. Elias"
+      ]
     }
   ],
   "nights": {
@@ -219,6 +231,13 @@
       "fruits",
       "cars",
       "constellations"
+    ],
+    "2026-11-24": [
+      "sports",
+      "dogs",
+      "pasta-shapes",
+      "sherlock-holmes-canon",
+      "us-national-parks"
     ]
   }
 }
