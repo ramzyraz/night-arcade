@@ -180,6 +180,18 @@
         "Big Bend|Biscayne|Carlsbad Caverns|Channel Islands|Congaree|Cuyahoga Valley|Dry Tortugas|Great Basin|Great Sand Dunes|Guadalupe Mountains|Haleakalā|Hot Springs|Indiana Dunes|Isle Royale|Kings Canyon|Lassen Volcanic|Mesa Verde|New River Gorge|North Cascades|Petrified Forest",
         "National Park of American Samoa|Black Canyon of the Gunnison|Gates of the Arctic|Gateway Arch|Katmai|Kenai Fjords|Kobuk Valley|Lake Clark|Pinnacles|Saguaro|Theodore Roosevelt|Virgin Islands|Voyageurs|Wind Cave|Wrangell–St. Elias"
       ]
+    },
+    {
+      "id": "national-capitals",
+      "name": "National capitals",
+      "prompt": "Name national capitals",
+      "added": "2026-11-21",
+      "tiers": [
+        "London|Paris|Tokyo|Rome|Beijing=Peking|Washington, D.C.=Washington|Ottawa|Canberra|New Delhi|Moscow|Madrid|Cairo|Seoul|Bangkok|Athens",
+        "Berlin|Lisbon|Amsterdam|Brussels|Vienna|Prague|Stockholm|Oslo|Helsinki|Copenhagen|Dublin|Buenos Aires|Mexico City|Brasília|Santiago|Lima|Havana|Ankara|Riyadh|Tehran|Islamabad|Nairobi|Jakarta|Singapore|Abu Dhabi",
+        "Warsaw|Budapest|Bucharest|Sofia|Belgrade|Zagreb|Kyiv=Kiev|Minsk|Tallinn|Riga|Vilnius|Reykjavík|Bern|Luxembourg|Monaco|San Marino|Vatican City|Doha|Kuwait City|Muscat|Manama|Kathmandu|Dhaka|Yangon=Rangoon|Hanoi|Phnom Penh|Vientiane|Kuala Lumpur|Ulaanbaatar=Ulan Bator|Tashkent|Yerevan|Tbilisi|Baku|La Paz|Sucre|Pretoria|Cape Town|Bloemfontein",
+        "Tirana|Skopje|Podgorica|Sarajevo|Pristina|Chișinău=Kishinev|Ashgabat=Ashkhabad|Dushanbe|Bishkek|Thimphu|Malé|Naypyidaw=Nay Pyi Taw|Bandar Seri Begawan|Dili|Port Moresby|Suva|Apia|Nukuʻalofa|Honiara|Port Vila|South Tarawa=Tarawa|Funafuti|Majuro|Palikir|Banjul|Bissau|Conakry|Freetown|Monrovia|Yamoussoukro|Ouagadougou|Niamey|N'Djamena|Bangui|Libreville|Malabo|Yaoundé|Luanda|Windhoek|Gaborone|Maseru|Mbabane|Lobamba|Antananarivo=Tananarive|Moroni|Victoria|Djibouti|Asmara|Juba|Lilongwe|Maputo|Dodoma|Porto-Novo|Putrajaya|Sri Jayawardenepura Kotte=Kotte"
+      ]
     }
   ],
   "nights": {
