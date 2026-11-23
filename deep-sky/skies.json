@@ -192,6 +192,18 @@
         "Warsaw|Budapest|Bucharest|Sofia|Belgrade|Zagreb|Kyiv=Kiev|Minsk|Tallinn|Riga|Vilnius|Reykjavík|Bern|Luxembourg|Monaco|San Marino|Vatican City|Doha|Kuwait City|Muscat|Manama|Kathmandu|Dhaka|Yangon=Rangoon|Hanoi|Phnom Penh|Vientiane|Kuala Lumpur|Ulaanbaatar=Ulan Bator|Tashkent|Yerevan|Tbilisi|Baku|La Paz|Sucre|Pretoria|Cape Town|Bloemfontein",
         "Tirana|Skopje|Podgorica|Sarajevo|Pristina|Chișinău=Kishinev|Ashgabat=Ashkhabad|Dushanbe|Bishkek|Thimphu|Malé|Naypyidaw=Nay Pyi Taw|Bandar Seri Begawan|Dili|Port Moresby|Suva|Apia|Nukuʻalofa|Honiara|Port Vila|South Tarawa=Tarawa|Funafuti|Majuro|Palikir|Banjul|Bissau|Conakry|Freetown|Monrovia|Yamoussoukro|Ouagadougou|Niamey|N'Djamena|Bangui|Libreville|Malabo|Yaoundé|Luanda|Windhoek|Gaborone|Maseru|Mbabane|Lobamba|Antananarivo=Tananarive|Moroni|Victoria|Djibouti|Asmara|Juba|Lilongwe|Maputo|Dodoma|Porto-Novo|Putrajaya|Sri Jayawardenepura Kotte=Kotte"
       ]
+    },
+    {
+      "id": "original-151-pokemon",
+      "name": "Original 151 Pokémon",
+      "prompt": "Name Pokémon from the original 151",
+      "added": "2026-11-23",
+      "tiers": [
+        "Pikachu|Charizard|Bulbasaur|Squirtle|Mewtwo|Mew|Eevee|Jigglypuff|Meowth|Snorlax|Gengar|Psyduck|Magikarp|Gyarados|Charmander|Venusaur|Blastoise|Lapras|Ditto|Vulpix",
+        "Ivysaur|Wartortle|Charmeleon|Raichu|Clefairy|Clefable|Ninetales|Wigglytuff|Butterfree|Pidgey|Pidgeotto|Pidgeot|Rattata|Raticate|Growlithe|Arcanine|Abra|Kadabra|Alakazam|Machop|Machoke|Machamp|Geodude|Graveler|Golem|Onix|Gastly|Haunter|Articuno|Zapdos|Moltres|Dragonite|Dratini|Dragonair|Slowpoke|Slowbro|Chansey|Hitmonlee|Hitmonchan|Farfetch'd",
+        "Caterpie|Metapod|Weedle|Kakuna|Beedrill|Spearow|Fearow|Ekans|Arbok|Sandshrew|Sandslash|Nidoran♀=Nidoran Female|Nidorina|Nidoqueen|Nidorino|Nidoking|Zubat|Golbat|Oddish|Gloom|Vileplume|Diglett|Dugtrio|Persian|Golduck|Mankey|Primeape|Poliwag|Poliwhirl|Poliwrath|Ponyta|Rapidash|Magnemite|Magneton|Doduo|Dodrio|Drowzee|Hypno|Porygon|Omanyte|Omastar|Kabuto|Kabutops|Aerodactyl|Vaporeon|Jolteon|Flareon|Horsea|Seadra|Electabuzz|Magmar",
+        "Paras|Parasect|Venonat|Venomoth|Bellsprout|Weepinbell|Victreebel|Tentacool|Tentacruel|Seel|Dewgong|Grimer|Muk|Shellder|Cloyster|Krabby|Kingler|Voltorb|Electrode|Exeggcute|Exeggutor|Cubone|Marowak|Lickitung|Koffing|Weezing|Rhyhorn|Rhydon|Tangela|Kangaskhan|Goldeen|Seaking|Staryu|Starmie|Mr. Mime|Scyther|Jynx|Pinsir|Tauros"
+      ]
     }
   ],
   "nights": {
@@ -250,6 +262,20 @@
       "pasta-shapes",
       "sherlock-holmes-canon",
       "us-national-parks"
+    ],
+    "2026-11-25": [
+      "countries",
+      "languages",
+      "instruments",
+      "national-capitals",
+      "original-151-pokemon"
+    ],
+    "2026-11-26": [
+      "cars",
+      "fruits",
+      "greek",
+      "vegetables",
+      "constellations"
     ]
   }
 }
