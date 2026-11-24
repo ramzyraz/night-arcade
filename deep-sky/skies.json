@@ -204,6 +204,18 @@
         "Caterpie|Metapod|Weedle|Kakuna|Beedrill|Spearow|Fearow|Ekans|Arbok|Sandshrew|Sandslash|Nidoran♀=Nidoran Female|Nidorina|Nidoqueen|Nidorino|Nidoking|Zubat|Golbat|Oddish|Gloom|Vileplume|Diglett|Dugtrio|Persian|Golduck|Mankey|Primeape|Poliwag|Poliwhirl|Poliwrath|Ponyta|Rapidash|Magnemite|Magneton|Doduo|Dodrio|Drowzee|Hypno|Porygon|Omanyte|Omastar|Kabuto|Kabutops|Aerodactyl|Vaporeon|Jolteon|Flareon|Horsea|Seadra|Electabuzz|Magmar",
         "Paras|Parasect|Venonat|Venomoth|Bellsprout|Weepinbell|Victreebel|Tentacool|Tentacruel|Seel|Dewgong|Grimer|Muk|Shellder|Cloyster|Krabby|Kingler|Voltorb|Electrode|Exeggcute|Exeggutor|Cubone|Marowak|Lickitung|Koffing|Weezing|Rhyhorn|Rhydon|Tangela|Kangaskhan|Goldeen|Seaking|Staryu|Starmie|Mr. Mime|Scyther|Jynx|Pinsir|Tauros"
       ]
+    },
+    {
+      "id": "beatles-songs",
+      "name": "Beatles songs",
+      "prompt": "Name songs recorded by the Beatles",
+      "added": "2026-11-24",
+      "tiers": [
+        "Hey Jude|Let It Be|Yesterday|Come Together|I Want to Hold Your Hand|Here Comes the Sun|All You Need Is Love|Can't Buy Me Love|Help!|A Hard Day's Night|Something|Yellow Submarine|Twist and Shout|She Loves You|Lucy in the Sky with Diamonds|Strawberry Fields Forever|Blackbird|In My Life",
+        "Eight Days a Week|Ticket to Ride|Norwegian Wood (This Bird Has Flown)|Penny Lane|Across the Universe|While My Guitar Gently Weeps|Get Back|All My Loving|I Saw Her Standing There|Do You Want to Know a Secret|And I Love Her|Please Please Me|From Me to You|We Can Work It Out|Day Tripper|Drive My Car|Eleanor Rigby|Ob-La-Di, Ob-La-Da|With a Little Help from My Friends|When I'm Sixty-Four|The Long and Winding Road|Revolution|Back in the U.S.S.R.|Paperback Writer|I Feel Fine",
+        "The Fool on the Hill|Magical Mystery Tour|I Am the Walrus|You Never Give Me Your Money|Rocky Raccoon|Happiness Is a Warm Gun|Dear Prudence|Taxman|Tomorrow Never Knows|Got to Get You into My Life|Michelle|Girl|You've Got to Hide Your Love Away|Nowhere Man|Rain|I'm Only Sleeping|For No One|Here, There and Everywhere|I Want You (She's So Heavy)|The End|Golden Slumbers|Carry That Weight|Fixing a Hole|Lovely Rita|Being for the Benefit of Mr. Kite!|Within You Without You|Hey Bulldog|I'll Follow the Sun|You Really Got a Hold on Me|I Should Have Known Better",
+        "Only a Northern Song|It's All Too Much|Blue Jay Way|The Inner Light|You Know My Name (Look Up the Number)|Old Brown Shoe|Cry Baby Cry|Savoy Truffle|Martha My Dear|Long, Long, Long|Everybody's Got Something to Hide Except Me and My Monkey|Glass Onion|I'm So Tired|Yer Blues|Mother Nature's Son|The Continuing Story of Bungalow Bill|Sexy Sadie|Why Don't We Do It in the Road?|Good Night|Sun King|Mean Mr. Mustard|Polythene Pam|Because|Doctor Robert|She Said She Said"
+      ]
     }
   ],
   "nights": {
@@ -276,6 +288,13 @@
       "greek",
       "vegetables",
       "constellations"
+    ],
+    "2026-11-27": [
+      "gemstones",
+      "beatles-songs",
+      "sherlock-holmes-canon",
+      "elements",
+      "us-national-parks"
     ]
   }
 }
